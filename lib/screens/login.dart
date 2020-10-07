@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quizapp/screens/create_account.dart';
+import 'package:quizapp/models/user.dart';
 import '../services/services.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 
 final GoogleSignIn gSignIn = GoogleSignIn();
 final usersReference = Firestore.instance.collection("users");
+
+final DateTime timestamp = DateTime.now();
+User currentUser;
 
 class LoginScreen extends StatefulWidget {
   createState() => LoginScreenState();
@@ -42,8 +46,23 @@ class LoginScreenState extends State<LoginScreen> {
 
     if(!documentSnapshot.exists){
       final username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccount()));
-    }
 
+      usersReference.document(gCurrentUser.id).setData({
+        "id": gCurrentUser.id,
+        "profileName": gCurrentUser.displayName,
+        "username": username,
+        "url": gCurrentUser.photoUrl,
+        "email": gCurrentUser.email,
+        "bio": "",
+        "timestamp": timestamp,
+
+
+      });
+
+      documentSnapshot = await usersReference.document(gCurrentUser.id).get();
+
+    }
+    currentUser = User.fromDocument(documentSnapshot);
   }
 
   loginUser(){
@@ -83,7 +102,7 @@ class LoginScreenState extends State<LoginScreen> {
             ),
             Text('Your Tagline'),
             GestureDetector(
-              onTap: loginUser,
+              onTap: ()=> "button tapped",
               child: LoginButton(
                 text: 'LOGIN WITH GOOGLE',
                 icon: FontAwesomeIcons.google,
