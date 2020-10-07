@@ -70,20 +70,39 @@ class LoginScreenState extends State<LoginScreen> {
     gSignIn.signIn();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    auth.getUser.then(
-      (user) {
-        if (user != null) {
-          Navigator.pushReplacementNamed(context, '/topics');
-        }
-      },
-    );
+  logoutUser(){
+    gSignIn.signOut();
+  }
+
+  Widget buildHomeScreen(){
+    return RaisedButton.icon(onPressed: logoutUser, icon: Icon(Icons.close), label: Text("Sign Out"));
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
+
+          gSignIn.onCurrentUserChanged.listen((gSigninAccount) { 
+            controlSignIn(gSigninAccount);
+          }, onError: (gError)
+          {
+            print("Error Message: " + gError);
+          });
+
+          gSignIn.signInSilently(suppressErrors: false).then((gSignInAccount) {
+            controlSignIn(gSignInAccount);
+          }).catchError((gError){
+            print("Error Message: " + gError);
+          });
+
+
+
+
+  }
+
+  @override
+  Scaffold buildSignInScreen() {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(30),
@@ -102,14 +121,21 @@ class LoginScreenState extends State<LoginScreen> {
             ),
             Text('Your Tagline'),
             GestureDetector(
-              onTap: ()=> "button tapped",
-              child: LoginButton(
-                text: 'LOGIN WITH GOOGLE',
-                icon: FontAwesomeIcons.google,
-                color: Colors.black45,
-                loginMethod: auth.googleSignIn,
+              onTap: ()=> loginUser(),
+                child: Container(
+                  width: 270.0,
+                  height: 65.0,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/google_signin_button.png"),
+                      fit: BoxFit.cover,
+                      
+                    ),
+                  ),
+                ),
+
               ),
-            ),
+
             FutureBuilder<Object>(
               future: auth.appleSignInAvailable,
               builder: (context, snapshot) {
@@ -133,7 +159,21 @@ class LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context){
+    if (isSignedIn) {
+
+      return buildHomeScreen();
+    }
+
+    else
+      {
+      return buildSignInScreen();
+    }
+  }
 }
+
 
 class LoginButton extends StatelessWidget {
   final Color color;

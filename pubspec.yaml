@@ -42,6 +42,7 @@ flutter:
     - assets/
     - assets/covers/
     - assets/congrats.gif
+    - assets/images/google_signin_button.png
     
 
   # The following line ensures that the Material Icons font is
