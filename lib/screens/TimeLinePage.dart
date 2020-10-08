@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizapp/widgets/widget.dart';
 
 class TimeLinePage extends StatefulWidget {
   @override
@@ -8,6 +9,13 @@ class TimeLinePage extends StatefulWidget {
 class _TimeLinePageState extends State<TimeLinePage> {
   @override
   Widget build(context) {
-    return Text("TimeLine Page goes here.");
+    return Scaffold(
+        appBar: AppBar(
+        title: AppLogo(),
+    brightness: Brightness.light,
+    elevation: 0.0,
+    backgroundColor: Colors.transparent,
+        ),
+    );
   }
 }

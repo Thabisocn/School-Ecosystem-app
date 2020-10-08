@@ -5,8 +5,8 @@ class Loader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 250,
-      height: 250,
+      width: 100,
+      height: 100,
       child: CircularProgressIndicator(),
     );
   }

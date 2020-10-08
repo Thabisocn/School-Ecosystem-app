@@ -90,7 +90,9 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   whenPageChanges(int pageIndex){
-    this.getPageIndex = pageIndex;
+    setState(() {
+      this.getPageIndex = pageIndex;
+    });
   }
 
   onTapChangePage(int pageIndex){
@@ -121,9 +123,9 @@ class LoginScreenState extends State<LoginScreen> {
         inactiveColor:  Colors.blueGrey ,
 
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home)),
-          BottomNavigationBarItem(icon: Icon(Icons.clear_all)),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle)),
+          BottomNavigationBarItem(icon: Icon(Icons.home, size: 20), title: Text('Home')),
+          BottomNavigationBarItem(icon: Icon(Icons.clear_all, size: 20), title: Text('Feed')),
+          BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 20), title: Text('Upload')),
           BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.graduationCap, size: 20), title: Text('Topics')),
           BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.userCircle, size: 20),title: Text('Profile')),
         ],

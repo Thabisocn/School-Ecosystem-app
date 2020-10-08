@@ -1,8 +1,10 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:quizapp/models/user.dart';
 import 'package:quizapp/widgets/widget.dart';
 
 
@@ -29,7 +31,7 @@ class _HomeState extends State<Home> {
         if (!datasnapshot.hasData) {
           return CircularProgressIndicator();
         }
-        //User user = User.fromDocument(datasnapshot.data);
+        User user = User.fromDocument(datasnapshot.data);
         return Padding(
           padding: EdgeInsets.only(top: 17.0, left: 8.0),
           child: Column(
@@ -39,7 +41,7 @@ class _HomeState extends State<Home> {
                   CircleAvatar(
                     radius: 40.0,
                     backgroundColor: Colors.grey,
-                    //backgroundImage: CachedNetworkImageProvider(user.photoUrl),
+                    backgroundImage: CachedNetworkImageProvider(user.url),
                   ),
                   Spacer(),
                   Container(
@@ -69,7 +71,7 @@ class _HomeState extends State<Home> {
         if (!datasnapshot.hasData) {
           return CircularProgressIndicator();
         }
-      //  User user = User.fromDocument(datasnapshot.data);
+        User user = User.fromDocument(datasnapshot.data);
 
         return Padding(
           padding: EdgeInsets.only(top: 10.0, left: 10.0),
@@ -89,7 +91,11 @@ class _HomeState extends State<Home> {
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(top: 5.0),
-
+                    child: Text(
+                      user.username, style: TextStyle(fontSize: 25.0,
+                        color: Colors.black26,
+                        fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
 
