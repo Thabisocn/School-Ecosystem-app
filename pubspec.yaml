@@ -17,7 +17,7 @@ dependencies:
 
   firebase_core: 0.4.4+3
   firebase_analytics: 5.0.11
-
+  carousel_slider: ^1.4.1
   cloud_firestore: 0.13.4+2
 
   firebase_auth: 0.15.5+3
@@ -43,6 +43,9 @@ flutter:
     - assets/covers/
     - assets/congrats.gif
     - assets/images/google_signin_button.png
+    - assets/yoga_1.jpg
+    - assets/yoga_2.jpg
+    - assets/yoga_3.jpg
     
 
   # The following line ensures that the Material Icons font is

@@ -1,10 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:quizapp/screens/Home.dart';
+import 'package:quizapp/screens/TimeLinePage.dart';
+import 'package:quizapp/screens/about.dart';
 import 'package:quizapp/screens/create_account.dart';
 import 'package:quizapp/models/user.dart';
+import 'package:quizapp/screens/profile.dart';
+import 'package:quizapp/screens/topics.dart';
 import '../services/services.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 
@@ -21,6 +27,8 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   AuthService auth = AuthService();
   bool isSignedIn = false;
+  PageController pageController;
+  int getPageIndex = 0;
 
   controlSignIn(GoogleSignInAccount signInAccount) async{
     if (signInAccount != null) {
@@ -65,6 +73,13 @@ class LoginScreenState extends State<LoginScreen> {
     currentUser = User.fromDocument(documentSnapshot);
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    pageController.dispose();
+    super.dispose();
+  }
+
   loginUser(){
 
     gSignIn.signIn();
@@ -74,14 +89,55 @@ class LoginScreenState extends State<LoginScreen> {
     gSignIn.signOut();
   }
 
-  Widget buildHomeScreen(){
-    return RaisedButton.icon(onPressed: logoutUser, icon: Icon(Icons.close), label: Text("Sign Out"));
+  whenPageChanges(int pageIndex){
+    this.getPageIndex = pageIndex;
+  }
+
+  onTapChangePage(int pageIndex){
+
+    pageController.animateToPage(pageIndex, duration: Duration(milliseconds: 400), curve: Curves.bounceInOut);
+  }
+
+  Scaffold buildHomeScreen(){
+  //  return RaisedButton.icon(onPressed: logoutUser, icon: Icon(Icons.close), label: Text("Sign Out"));
+    return Scaffold(
+      body: PageView(
+        children: <Widget>[
+          Home(),
+          TimeLinePage(),
+          AboutScreen(),
+          TopicsScreen(),
+          ProfileScreen(),
+        ],
+        controller: pageController ,
+        onPageChanged: whenPageChanges ,
+        physics: NeverScrollableScrollPhysics(),
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        currentIndex: getPageIndex,
+        onTap: onTapChangePage,
+        backgroundColor: Theme.of(context).accentColor,
+        activeColor: Colors.orange ,
+        inactiveColor:  Colors.blueGrey ,
+
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home)),
+          BottomNavigationBarItem(icon: Icon(Icons.clear_all)),
+          BottomNavigationBarItem(icon: Icon(Icons.add_circle)),
+          BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.graduationCap, size: 20), title: Text('Topics')),
+          BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.userCircle, size: 20),title: Text('Profile')),
+        ],
+
+      ) ,
+
+    );
   }
 
   @override
   void initState() {
     super.initState();
 
+    pageController = PageController();
 
           gSignIn.onCurrentUserChanged.listen((gSigninAccount) { 
             controlSignIn(gSigninAccount);

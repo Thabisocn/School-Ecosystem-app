@@ -33,7 +33,7 @@ class TopicsScreen extends StatelessWidget {
               crossAxisCount: 2,
               children: topics.map((topic) => TopicItem(topic: topic)).toList(),
             ),
-            bottomNavigationBar: AppBottomNav(),
+
           );
         } else {
           return LoadingScreen();
