@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quizapp/screens/upload_page.dart';
 import 'services/services.dart';
 import 'screens/screens.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => LoginScreen(),
           '/topics': (context) => TopicsScreen(),
           '/profile': (context) => ProfileScreen(),
-          '/about': (context) => Upload(),
+          '/about': (context) => Uploader(),
         },
 
         // Theme

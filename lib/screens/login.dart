@@ -7,11 +7,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quizapp/screens/Home.dart';
 import 'package:quizapp/screens/TimeLinePage.dart';
-import 'package:quizapp/screens/about.dart';
+
 import 'package:quizapp/screens/create_account.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/profile.dart';
 import 'package:quizapp/screens/topics.dart';
+import 'package:quizapp/screens/upload_page.dart';
 import '../services/services.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 
@@ -110,7 +111,7 @@ class LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           Home(),
           TimeLinePage(),
-          Upload(),
+          Uploader(gCurrentUser: currentUser,),
           TopicsScreen(),
           ProfileScreen(),
         ],
