@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'services/services.dart';
 import 'screens/screens.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/screens/topics.dart';
 
 void main() => runApp(MyApp());
 
