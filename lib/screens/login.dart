@@ -16,10 +16,17 @@ import 'package:quizapp/screens/upload_page.dart';
 import '../services/services.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 
+
 final GoogleSignIn gSignIn = GoogleSignIn();
 final usersReference = Firestore.instance.collection("users");
 final StorageReference storageReference = FirebaseStorage.instance.ref().child("Posts Pictures");
 final postsReference = Firestore.instance.collection("posts");
+final activityFeedReference = Firestore.instance.collection('feed');
+final commentsReference = Firestore.instance.collection('comments');
+final followersReference = Firestore.instance.collection('followers');
+final followingReference = Firestore.instance.collection('following');
+final timelineReference = Firestore.instance.collection('timeline');
+
 
 final DateTime timestamp = DateTime.now();
 User currentUser;
@@ -113,7 +120,7 @@ class LoginScreenState extends State<LoginScreen> {
           TimeLinePage(),
           Uploader(gCurrentUser: currentUser,),
           TopicsScreen(),
-          ProfileScreen(),
+          ProfileScreen(userProfileId: gSignIn.currentUser.id),
         ],
         controller: pageController ,
         onPageChanged: whenPageChanges ,
