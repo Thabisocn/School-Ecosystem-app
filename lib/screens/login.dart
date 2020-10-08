@@ -110,7 +110,7 @@ class LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           Home(),
           TimeLinePage(),
-          Uploader(gCurrentUser: currentUser,),
+          Upload(),
           TopicsScreen(),
           ProfileScreen(),
         ],
@@ -124,7 +124,7 @@ class LoginScreenState extends State<LoginScreen> {
         currentIndex: getPageIndex,
         onTap: onTapChangePage,
         backgroundColor: Colors.white,
-        activeColor: Colors.orange ,
+        activeColor: Colors.blue ,
         inactiveColor:  Colors.blueGrey ,
 
         items: [
