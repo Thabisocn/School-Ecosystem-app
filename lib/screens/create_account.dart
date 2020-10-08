@@ -24,7 +24,9 @@ class _CreateAccountState extends State<CreateAccount> {
     SnackBar snackBar = SnackBar(content: Text("Welcome " + username));
     _scaffoldKey.currentState.showSnackBar(snackBar);
     Timer(Duration(seconds: 4), (){
-      Navigator.pushReplacementNamed(context, '/topics');
+      Navigator.pop(context, username);
+
+
     });
     
 

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,6 +17,8 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 
 final GoogleSignIn gSignIn = GoogleSignIn();
 final usersReference = Firestore.instance.collection("users");
+final StorageReference storageReference = FirebaseStorage.instance.ref().child("Posts Pictures");
+final postsReference = Firestore.instance.collection("posts");
 
 final DateTime timestamp = DateTime.now();
 User currentUser;
@@ -42,7 +45,7 @@ class LoginScreenState extends State<LoginScreen> {
     else
     {
       setState(() {
-        isSignedIn = true;
+        isSignedIn = false;
       });
     }
 
@@ -107,18 +110,20 @@ class LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           Home(),
           TimeLinePage(),
-          AboutScreen(),
+          Uploader(gCurrentUser: currentUser,),
           TopicsScreen(),
           ProfileScreen(),
         ],
         controller: pageController ,
         onPageChanged: whenPageChanges ,
         physics: NeverScrollableScrollPhysics(),
+
       ),
       bottomNavigationBar: CupertinoTabBar(
+
         currentIndex: getPageIndex,
         onTap: onTapChangePage,
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Colors.white,
         activeColor: Colors.orange ,
         inactiveColor:  Colors.blueGrey ,
 

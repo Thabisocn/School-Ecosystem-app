@@ -15,14 +15,10 @@ class TopicsScreen extends StatelessWidget {
           List<Topic> topics = snap.data;
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.deepPurple,
+              backgroundColor: Colors.blue,
               title: Text('Topics'),
               actions: [
-                IconButton(
-                  icon: Icon(FontAwesomeIcons.userCircle,
-                      color: Colors.pink[200]),
-                  onPressed: () => Navigator.pushNamed(context, '/profile'),
-                )
+
               ],
             ),
             drawer: TopicDrawer(topics: snap.data),

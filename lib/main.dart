@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => LoginScreen(),
           '/topics': (context) => TopicsScreen(),
           '/profile': (context) => ProfileScreen(),
-          '/about': (context) => AboutScreen(),
+          '/about': (context) => Uploader(),
         },
 
         // Theme
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           bottomAppBarTheme: BottomAppBarTheme(
             color: Colors.black87,
           ),
-          brightness: Brightness.dark,
+
           textTheme: TextTheme(
             body1: TextStyle(fontSize: 18),
             body2: TextStyle(fontSize: 16),
