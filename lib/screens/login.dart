@@ -116,7 +116,7 @@ class LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: PageView(
         children: <Widget>[
-          Home(),
+          Home(userProfileId: gSignIn.currentUser.id),
           TimeLinePage(),
           Uploader(gCurrentUser: currentUser,),
           TopicsScreen(),

@@ -88,11 +88,7 @@ class _HomeState extends State<Home> {
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      user.username, style: TextStyle(fontSize: 25.0,
-                        color: Colors.black26,
-                        fontWeight: FontWeight.bold),
-                    ),
+
                   ),
                 ],
 

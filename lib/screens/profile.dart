@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/models/user.dart';
+import 'package:quizapp/screens/activity_feed.dart';
 import 'package:quizapp/screens/edit_profile_page.dart';
 import 'package:quizapp/screens/login.dart';
+import 'package:quizapp/screens/search_page.dart';
 import 'package:quizapp/shared/loader.dart';
 import 'package:quizapp/widgets/HeaderWidget.dart';
+import 'package:quizapp/widgets/widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String userProfileId;
@@ -152,12 +155,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context,strTitle: "Profile",),
+      appBar: AppBar(
+        title: AppLogo(),
+        brightness: Brightness.light,
+        elevation: 1.0,
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.notifications_active,
+                color: Colors.grey,
+              ),
+              onPressed: () {
+                gotoActivityFeed(context);
+              }),
+
+          IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.grey,
+              ),
+              onPressed: () {
+                gotoSecondActivity(context);
+              }),
+
+        ],
+      ),
       body: ListView(
         children: <Widget>[
           createProfileTopView(),
         ],
       ),
     );
+  }
+
+  gotoActivityFeed(BuildContext context){
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ActivityFeedPage()),
+    );
+
+  }
+
+  gotoSecondActivity(BuildContext context){
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SearchPage()),
+    );
+
   }
 }

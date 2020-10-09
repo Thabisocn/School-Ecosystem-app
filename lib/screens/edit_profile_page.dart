@@ -91,10 +91,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               children: <Widget>[
                 Padding(
                     padding: EdgeInsets.only(top: 15.0, bottom: 7.0),
-                    child: CircleAvatar(
-                      radius: 52.0,
-                      backgroundImage: CachedNetworkImageProvider(user.url),
-                    ) ,
+
                 ),
                 Padding(padding: EdgeInsets.all(16.0),
                 child: Column(
