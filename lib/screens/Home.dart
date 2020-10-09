@@ -4,9 +4,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:quizapp/models/user.dart';
+import 'package:quizapp/screens/login.dart';
 import 'package:quizapp/widgets/widget.dart';
-
 
 class Home extends StatefulWidget {
 
@@ -26,7 +27,7 @@ class _HomeState extends State<Home> {
 
   createProfileTopView() {
     return FutureBuilder(
-      //future: ref.document(widget.userProfileId).get(),
+      future: usersReference.document(widget.userProfileId).get(),
       builder: (context, datasnapshot) {
         if (!datasnapshot.hasData) {
           return CircularProgressIndicator();
@@ -38,11 +39,7 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  CircleAvatar(
-                    radius: 40.0,
-                    backgroundColor: Colors.grey,
-                    backgroundImage: CachedNetworkImageProvider(user.url),
-                  ),
+
                   Spacer(),
                   Container(
                     width: 100.0,
@@ -66,7 +63,7 @@ class _HomeState extends State<Home> {
 
   createNameboxView() {
     return FutureBuilder(
-     // future: ref.document(widget.userProfileId).get(),
+      future: usersReference.document(widget.userProfileId).get(),
       builder: (context, datasnapshot) {
         if (!datasnapshot.hasData) {
           return CircularProgressIndicator();
@@ -113,7 +110,7 @@ class _HomeState extends State<Home> {
 
   welcomeView() {
     return FutureBuilder(
-      //future: ref.document(widget.userProfileId).get(),
+      future: usersReference.document(widget.userProfileId).get(),
       builder: (context, datasnapshot) {
         return Padding(
           padding: EdgeInsets.only(top: 2.0, left: 10.0),
@@ -154,7 +151,7 @@ class _HomeState extends State<Home> {
 
   topicsstudying() {
     return FutureBuilder(
-      // future: ref.document(widget.userProfileId).get(),
+      future: usersReference.document(widget.userProfileId).get(),
       builder: (context, datasnapshot) {
         return Padding(
           padding: EdgeInsets.only(top: 2.0, left: 10.0),
@@ -195,8 +192,8 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: AppLogo(),
         brightness: Brightness.light,
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
+        elevation: 1.0,
+        backgroundColor: Colors.white,
         //brightness: Brightness.li,
       ),
 
@@ -207,102 +204,145 @@ class _HomeState extends State<Home> {
           welcomeView(),
           _searchBar(),
           topicsstudying(),
-      Container(
-          height: 250,
-        child: ListView(
+          Container(
+              height: 250,
+              child: ListView(
 
 
-          children: <Widget>[
+                children: <Widget>[
 
 
-            SizedBox(height: 15.0),
+                  SizedBox(height: 15.0),
 
 
-            CarouselSlider(
+                  CarouselSlider(
 
 
-              height: 240.0,
+                    height: 240.0,
 
 
-              enlargeCenterPage: true,
+                    enlargeCenterPage: true,
 
 
-              autoPlay: true,
+                    autoPlay: true,
 
 
-              aspectRatio: 16 / 9,
+                    aspectRatio: 16 / 9,
 
 
-              autoPlayCurve: Curves.fastOutSlowIn,
+                    autoPlayCurve: Curves.fastOutSlowIn,
 
 
-              enableInfiniteScroll: true,
+                    enableInfiniteScroll: true,
 
 
-              autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
 
 
-              viewportFraction: 0.8,
+                    viewportFraction: 0.8,
 
 
-              items: [
+                    items: [
 
 
-                Container(
+                      Container(
 
 
-                  margin: EdgeInsets.all(5.0),
+                        margin: EdgeInsets.all(5.0),
 
 
-                  decoration: BoxDecoration(
+                        decoration: BoxDecoration(
 
 
-                    borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(10.0),
 
 
-                    image: DecorationImage(
+                          image: DecorationImage(
 
 
-                      image: AssetImage('assets/yoga_1.jpg'),
+                            image: AssetImage('assets/yoga_1.jpg'),
 
 
-                      fit: BoxFit.cover,
+                            fit: BoxFit.cover,
 
 
-                    ),
+                          ),
 
 
-                  ),
+                        ),
 
 
-                  child: Column(
+                        child: Column(
 
 
-                    mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
 
 
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
 
 
-                    children: <Widget>[
+                          children: <Widget>[
 
 
-                      Text(
+                            Text(
 
 
-                        'DUMMY data  for hahaha',
+                              'DUMMY data  for hahaha',
 
 
-                        style: TextStyle(
+                              style: TextStyle(
 
 
-                          color: Colors.white,
+                                color: Colors.white,
 
 
-                          fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.bold,
 
 
-                          fontSize: 18.0,
+                                fontSize: 18.0,
+
+
+                              ),
+
+
+                            ),
+
+
+
+                            Padding(
+
+
+                              padding: const EdgeInsets.all(15.0),
+
+
+                              child: Text(
+
+
+                                'Lorem Ipsum is simply dummy text use for printing and type script',
+
+
+                                style: TextStyle(
+
+
+                                  color: Colors.white,
+
+
+                                  fontSize: 15.0,
+
+
+                                ),
+
+
+                                textAlign: TextAlign.center,
+
+
+                              ),
+
+
+                            ),
+
+
+                          ],
 
 
                         ),
@@ -312,31 +352,211 @@ class _HomeState extends State<Home> {
 
 
 
-                      Padding(
+                      Container(
 
 
-                        padding: const EdgeInsets.all(15.0),
+                        margin: EdgeInsets.all(5.0),
 
 
-                        child: Text(
+                        decoration: BoxDecoration(
 
 
-                          'Lorem Ipsum is simply dummy text use for printing and type script',
+                          borderRadius: BorderRadius.circular(10.0),
 
 
-                          style: TextStyle(
+                          image: DecorationImage(
 
 
-                            color: Colors.white,
+                            image: AssetImage('assets/yoga_2.jpg'),
 
 
-                            fontSize: 15.0,
+                            fit: BoxFit.cover,
 
 
                           ),
 
 
-                          textAlign: TextAlign.center,
+                        ),
+
+
+                        child: Column(
+
+
+                          mainAxisAlignment: MainAxisAlignment.center,
+
+
+                          crossAxisAlignment: CrossAxisAlignment.center,
+
+
+                          children: <Widget>[
+
+
+                            Text(
+
+
+                              'DUMMY data  for hahaha',
+
+
+                              style: TextStyle(
+
+
+                                color: Colors.white,
+
+
+                                fontWeight: FontWeight.bold,
+
+
+                                fontSize: 18.0,
+
+
+                              ),
+
+
+                            ),
+
+
+
+                            Padding(
+
+
+                              padding: const EdgeInsets.all(15.0),
+
+
+                              child: Text(
+
+
+                                'Lorem Ipsum is simply dummy text use for printing and type script',
+
+
+                                style: TextStyle(
+
+
+                                  color: Colors.white,
+
+
+                                  fontSize: 15.0,
+
+
+                                ),
+
+
+                                textAlign: TextAlign.center,
+
+
+                              ),
+
+
+                            ),
+
+
+                          ],
+
+
+                        ),
+
+
+                      ),
+
+
+
+                      Container(
+
+
+                        margin: EdgeInsets.all(5.0),
+
+
+                        decoration: BoxDecoration(
+
+
+                          borderRadius: BorderRadius.circular(10.0),
+
+
+                          image: DecorationImage(
+
+
+                            image: AssetImage('assets/yoga_3.jpg'),
+
+
+                            fit: BoxFit.cover,
+
+
+                          ),
+
+
+                        ),
+
+
+                        child: Column(
+
+
+                          mainAxisAlignment: MainAxisAlignment.center,
+
+
+                          crossAxisAlignment: CrossAxisAlignment.center,
+
+
+                          children: <Widget>[
+
+
+                            Text(
+
+
+                              'DUMMY data  for hahaha',
+
+
+                              style: TextStyle(
+
+
+                                color: Colors.white,
+
+
+                                fontWeight: FontWeight.bold,
+
+
+                                fontSize: 18.0,
+
+
+                              ),
+
+
+                            ),
+
+
+
+                            Padding(
+
+
+                              padding: const EdgeInsets.all(15.0),
+
+
+                              child: Text(
+
+
+                                'Lorem Ipsum is simply dummy text use for printing and type script',
+
+
+                                style: TextStyle(
+
+
+                                  color: Colors.white,
+
+
+                                  fontSize: 15.0,
+
+
+                                ),
+
+
+                                textAlign: TextAlign.center,
+
+
+                              ),
+
+
+                            ),
+
+
+                          ],
 
 
                         ),
@@ -351,233 +571,10 @@ class _HomeState extends State<Home> {
                   ),
 
 
-                ),
+                ],
+              )
 
-
-
-                Container(
-
-
-                  margin: EdgeInsets.all(5.0),
-
-
-                  decoration: BoxDecoration(
-
-
-                    borderRadius: BorderRadius.circular(10.0),
-
-
-                    image: DecorationImage(
-
-
-                      image: AssetImage('assets/yoga_2.jpg'),
-
-
-                      fit: BoxFit.cover,
-
-
-                    ),
-
-
-                  ),
-
-
-                  child: Column(
-
-
-                    mainAxisAlignment: MainAxisAlignment.center,
-
-
-                    crossAxisAlignment: CrossAxisAlignment.center,
-
-
-                    children: <Widget>[
-
-
-                      Text(
-
-
-                        'DUMMY data  for hahaha',
-
-
-                        style: TextStyle(
-
-
-                          color: Colors.white,
-
-
-                          fontWeight: FontWeight.bold,
-
-
-                          fontSize: 18.0,
-
-
-                        ),
-
-
-                      ),
-
-
-
-                      Padding(
-
-
-                        padding: const EdgeInsets.all(15.0),
-
-
-                        child: Text(
-
-
-                          'Lorem Ipsum is simply dummy text use for printing and type script',
-
-
-                          style: TextStyle(
-
-
-                            color: Colors.white,
-
-
-                            fontSize: 15.0,
-
-
-                          ),
-
-
-                          textAlign: TextAlign.center,
-
-
-                        ),
-
-
-                      ),
-
-
-                    ],
-
-
-                  ),
-
-
-                ),
-
-
-
-                Container(
-
-
-                  margin: EdgeInsets.all(5.0),
-
-
-                  decoration: BoxDecoration(
-
-
-                    borderRadius: BorderRadius.circular(10.0),
-
-
-                    image: DecorationImage(
-
-
-                      image: AssetImage('assets/yoga_3.jpg'),
-
-
-                      fit: BoxFit.cover,
-
-
-                    ),
-
-
-                  ),
-
-
-                  child: Column(
-
-
-                    mainAxisAlignment: MainAxisAlignment.center,
-
-
-                    crossAxisAlignment: CrossAxisAlignment.center,
-
-
-                    children: <Widget>[
-
-
-                      Text(
-
-
-                        'DUMMY data  for hahaha',
-
-
-                        style: TextStyle(
-
-
-                          color: Colors.white,
-
-
-                          fontWeight: FontWeight.bold,
-
-
-                          fontSize: 18.0,
-
-
-                        ),
-
-
-                      ),
-
-
-
-                      Padding(
-
-
-                        padding: const EdgeInsets.all(15.0),
-
-
-                        child: Text(
-
-
-                          'Lorem Ipsum is simply dummy text use for printing and type script',
-
-
-                          style: TextStyle(
-
-
-                            color: Colors.white,
-
-
-                            fontSize: 15.0,
-
-
-                          ),
-
-
-                          textAlign: TextAlign.center,
-
-
-                        ),
-
-
-                      ),
-
-
-                    ],
-
-
-                  ),
-
-
-                ),
-
-
-              ],
-
-
-            ),
-
-
-          ],
-)
-
-        ),
+          ),
 
 
 

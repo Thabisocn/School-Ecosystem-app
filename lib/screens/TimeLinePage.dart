@@ -13,8 +13,8 @@ class _TimeLinePageState extends State<TimeLinePage> {
         appBar: AppBar(
         title: AppLogo(),
     brightness: Brightness.light,
-    elevation: 0.0,
-    backgroundColor: Colors.transparent,
+          elevation: 1.0,
+    backgroundColor: Colors.white,
         ),
     );
   }

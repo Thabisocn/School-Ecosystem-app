@@ -62,6 +62,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
+
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(top: 13.0, ) ,
+                  child: Text(
+                    user.username,style: TextStyle(fontSize: 14.0,color: Colors.black,fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(top: 5.0 ) ,
+                  child: Text(
+                    user.email,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(top: 3.0) ,
+                  child: Text(
+                    user.bio,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
+                  ),
+                ),
+
               ],
             ),
 
