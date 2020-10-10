@@ -295,7 +295,7 @@ class _PostState extends State<Post> {
         alignment: Alignment.center,
         children: <Widget>[
             Image.network(url),
-          showHeart ? Icon(Icons.favorite, size: 140.0,color: Colors.pink,) : Text(""),
+
         ],
       ),
     );

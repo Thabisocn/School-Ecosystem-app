@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/login.dart';
+import 'package:quizapp/screens/profile.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -119,7 +120,7 @@ class UserResult extends StatelessWidget {
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: ()=> print("tapped"),
+            onTap: ()=> displayUserProfile(context, userProfileId:eachUser.id),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.grey,
@@ -135,5 +136,9 @@ class UserResult extends StatelessWidget {
         ],
       ),
     ),);
+  }
+
+  displayUserProfile(BuildContext context, {String userProfileId}){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(userProfileId: userProfileId,)));
   }
 }
