@@ -160,7 +160,7 @@ class LoginScreenState extends State<LoginScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home, size: 20), title: Text('Home')),
           BottomNavigationBarItem(icon: Icon(Icons.clear_all, size: 20), title: Text('Feed')),
           BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 20), title: Text('Upload')),
-          BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.graduationCap, size: 20), title: Text('Topics')),
+          BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.graduationCap, size: 20), title: Text('Courses')),
           BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.userCircle, size: 20),title: Text('Profile')),
         ],
 

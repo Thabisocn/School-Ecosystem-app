@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
       future: usersReference.document(widget.userProfileId).get(),
       builder: (context, datasnapshot) {
         if (!datasnapshot.hasData) {
-          return LoadingScreen();
+          return CircularProgressIndicator();
         }
         User user = User.fromDocument(datasnapshot.data);
 

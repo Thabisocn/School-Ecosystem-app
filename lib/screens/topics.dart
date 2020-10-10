@@ -15,8 +15,11 @@ class TopicsScreen extends StatelessWidget {
           List<Topic> topics = snap.data;
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.blue,
-              title: Text('Topics'),
+              backgroundColor: Colors.white,
+              title: Text('Course', style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.normal),),
               actions: [
 
               ],

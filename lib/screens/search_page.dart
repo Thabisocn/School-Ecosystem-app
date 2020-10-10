@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
     return AppBar(
       backgroundColor: Colors.white,
       title: TextFormField(
-        style: TextStyle(fontSize: 18.0,color: Colors.white),
+        style: TextStyle(fontSize: 18.0,color: Colors.black54),
         controller: searchTextEditingController,
         decoration: InputDecoration(
           hintText: "Search for a Student here...",hintStyle: TextStyle(color: Colors.grey),
@@ -61,7 +61,7 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
            Text(
              "Search Users",
              textAlign: TextAlign.center,
-             style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500, fontSize: 65.0),
+             style: TextStyle(color: Colors.black, fontSize: 40.0),
            ),
          ],
        ),
@@ -116,7 +116,7 @@ class UserResult extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.all(3.0),
     child: Container(
-      color: Colors.black54,
+      color: Colors.white,
       child: Column(
         children: <Widget>[
           GestureDetector(
@@ -126,10 +126,10 @@ class UserResult extends StatelessWidget {
                 backgroundColor: Colors.grey,
                 backgroundImage: CachedNetworkImageProvider(eachUser.url),),
               title: Text(eachUser.profileName, style: TextStyle(
-                color: Colors.orange, fontSize: 16.0,fontWeight: FontWeight.bold,
+                color: Colors.black54, fontSize: 16.0,fontWeight: FontWeight.bold,
               ),),
               subtitle: Text(eachUser.username, style: TextStyle(
-                color: Colors.orange, fontSize: 13.0,
+                color: Colors.black54, fontSize: 13.0,
               ),),
               ),
             ),

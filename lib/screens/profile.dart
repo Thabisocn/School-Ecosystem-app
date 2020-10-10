@@ -9,6 +9,7 @@ import 'package:quizapp/screens/login.dart';
 import 'package:quizapp/screens/search_page.dart';
 import 'package:quizapp/widgets/PostTileWidget.dart';
 import 'package:quizapp/widgets/PostWidget.dart';
+import 'package:quizapp/widgets/widget.dart';
 
 class ProfileScreen extends StatefulWidget {
 
@@ -278,13 +279,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
 
       appBar: AppBar(
-        title: Text("Profile"),
-        elevation: 5.0,
+        title: AppLogo(),
+        brightness: Brightness.light,
+        elevation: 0.0,
+        backgroundColor: Colors.white,
         actions: <Widget>[
           IconButton(
               icon: Icon(
                 Icons.notifications_active,
-                color: Colors.white,
+                color: Colors.grey,
               ),
               onPressed: () {
                 gotoActivityFeed(context);
@@ -293,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           IconButton(
               icon: Icon(
                 Icons.search,
-                color: Colors.white,
+                color: Colors.grey,
               ),
               onPressed: () {
                 gotoSecondActivity(context);
