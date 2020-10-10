@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/main.dart';
+import 'package:quizapp/shared/loader.dart';
 import 'package:quizapp/widgets/CImageWidget.dart';
 import 'package:http/http.dart';
 

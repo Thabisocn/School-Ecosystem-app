@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/activity_feed.dart';
@@ -7,6 +8,8 @@ import 'package:quizapp/main.dart';
 import 'package:quizapp/screens/search_page.dart';
 import 'package:quizapp/shared/loader.dart';
 import 'package:quizapp/widgets/HeaderWidget.dart';
+import 'package:quizapp/widgets/PostTileWidget.dart';
+import 'package:quizapp/widgets/PostWidget.dart';
 import 'package:quizapp/widgets/widget.dart';
 import 'package:quizapp/screens/login.dart';
 
@@ -21,6 +24,20 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final String currentOnlineUserId = currentUser?.id;
+  bool loading = false;
+  int countPost = 0;
+  List<Post> postsLIst = [];
+  String postOrientation = "list";
+  int countTotalFollowers = 0;
+  int countTotalFollowings = 0;
+  bool following = false;
+
+  void initState(){
+    getAllProfilePosts();
+
+  }
+
+
 
   createProfileTopView(){
     return FutureBuilder(
@@ -189,9 +206,95 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ListView(
         children: <Widget>[
           createProfileTopView(),
+
+          Divider(),
+          createListAndGridPostOrientatin(),
+          Divider(),
+          displayProfilePost(),
+
         ],
       ),
     );
+  }
+
+  displayProfilePost(){
+    if (loading) {
+      return LoadingScreen();
+
+    }
+    else if (postsLIst.isEmpty) {
+      return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(padding: EdgeInsets.all(30.0),
+              child: Icon(Icons.photo_library, color: Colors.grey, size: 200.0,),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Text("No Posts",  style: TextStyle(color: Colors.grey, fontSize: 10.0, fontWeight: FontWeight.bold),),
+            )
+          ],
+        ),
+      ) ;
+    }
+    else if (postOrientation == "grid") {
+      List<GridTile> gridTileList = [];
+      postsLIst.forEach((eachPost){
+        gridTileList.add(GridTile(child: PostTile(eachPost)));
+      } );
+      return GridView.count(
+        crossAxisCount: 3,
+        childAspectRatio: 1.0,
+        mainAxisSpacing: 1.5,
+        crossAxisSpacing: 1.5,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        children: gridTileList,
+      );
+    }
+
+    else if (postOrientation == "list") {
+      return Column(
+        children: postsLIst,
+      );
+    }
+
+  }
+
+  getAllProfilePosts() async{
+    setState(() {
+      loading  = true;
+    });
+
+    QuerySnapshot querySnapshot = await postsReference.document(widget.userProfileId).collection('usersPosts').orderBy("timestamp", descending: true).getDocuments();
+
+    setState(() {
+      loading = false;
+      countPost  = querySnapshot.documents.length;
+      postsLIst = querySnapshot.documents.map((documentSnapshot) => Post.fromDocument(documentSnapshot)).toList();
+    });
+  }
+
+  createListAndGridPostOrientatin(){
+    return  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+
+        IconButton(
+            onPressed: ()=> setOrientation("list") ,
+            icon: Icon(Icons.list),
+            color: postOrientation == "list" ? Theme.of(context).primaryColor : Colors.grey),
+      ],
+    );
+
+
+  }
+
+  setOrientation(String orientation){
+    setState(() {
+      this.postOrientation = orientation;
+    });
   }
 
   gotoActivityFeed(BuildContext context){

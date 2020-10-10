@@ -5,6 +5,7 @@ import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/Home.dart';
 import 'package:quizapp/main.dart';
 import 'package:quizapp/screens/login.dart';
+import 'package:quizapp/shared/loader.dart';
 
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,7 +64,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     
     if (_bioValid && _profileNameValid) {
       usersReference.document(widget.currentOnlineUserId).updateData({
-        "username" : ProfileNameTextEditingController.text,
+        "profileName" : ProfileNameTextEditingController.text,
         "bio": bioTextEditingController,
       });
 
@@ -87,7 +88,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           IconButton(icon: Icon(Icons.done), color: Colors.black, iconSize: 38.0, onPressed: ()=> Navigator.pop(context),),
         ],
       ),
-      body: loading ? CircularProgressIndicator() : ListView(
+      body: loading ? LoadingScreen() : ListView(
         children: <Widget>[
           Container(
             child: Column(
@@ -96,7 +97,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     padding: EdgeInsets.only(top: 15.0, bottom: 7.0),
                     child: CircleAvatar(
                       radius: 52.0,
-                     // backgroundImage: CachedNetworkImageProvider(user.url),
+                      backgroundImage: CachedNetworkImageProvider(user.url),
                     ) ,
                 ),
                 Padding(padding: EdgeInsets.all(16.0),
@@ -113,7 +114,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: Text(
                     "Update",
                     style: TextStyle(
-                      color:Colors.black,fontSize: 16.0,
+                      color:Colors.white,fontSize: 16.0,
                     ),
                   ),
 
@@ -124,7 +125,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                          onPressed: logOutUser,
                                child: Text("Logout",
                                  style: TextStyle(
-                                     color:Colors.red,
+                                     color:Colors.white,
                                      fontSize: 16.0),
                    ),
                        ),
@@ -140,7 +141,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   logOutUser() async{
         await gSignIn.signOut();
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> Home()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
   }
 
   Column createProfileNameTextFormField(){
@@ -201,7 +202,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     color: Colors.grey),
               ),
               hintStyle: TextStyle(color: Colors.grey),
-              errorText: _bioValid? null : "Bio description is very short"
+              errorText: _bioValid ? null : "Bio description is very short"
           ),
         ),
 
