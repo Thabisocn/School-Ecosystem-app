@@ -68,12 +68,13 @@ class CommentScreenState extends State<CommentScreen> {
     {
       activityFeedReference.document(postOwnerId).collection("feedItems").add({
         "type": "comment",
-        "commentDate": timestamp,
+        "commentData": commentTextEditingController.text,
         "postId": postId,
         "userId": currentUser.id,
         "username": currentUser.username,
         "userProfileImg":currentUser.url,
-        "url":postImageUrl
+        "url":postImageUrl,
+        "timestamp": timestamp,
 
       });
     }

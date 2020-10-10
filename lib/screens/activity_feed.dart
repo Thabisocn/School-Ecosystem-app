@@ -1,217 +1,190 @@
-import 'package:flutter/material.dart';
+
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:quizapp/main.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:http/http.dart';
+import 'package:quizapp/screens/PostScreenPage.dart';
 import 'package:quizapp/screens/login.dart';
 import 'package:quizapp/screens/profile.dart';
-
+import 'package:quizapp/widgets/HeaderWidget.dart';
+import 'package:timeago/timeago.dart' as tAgo;
 
 class ActivityFeedPage extends StatefulWidget {
   @override
   _ActivityFeedPageState createState() => _ActivityFeedPageState();
 }
 
-class _ActivityFeedPageState extends State<ActivityFeedPage> with AutomaticKeepAliveClientMixin<ActivityFeedPage> {
+
+
+class _ActivityFeedPageState extends State<ActivityFeedPage> {
+
+
   @override
   Widget build(BuildContext context) {
-    super.build(context); // reloads state when opened again
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Activity Feed",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.blue,
-      ),
-      body: buildActivityFeed(),
-    );
-  }
-
-  buildActivityFeed() {
-    return Container(
-      child: FutureBuilder(
-          future: getFeed(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Container(
-                  alignment: FractionalOffset.center,
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: CircularProgressIndicator());
-            else {
-              return ListView(children: snapshot.data);
+      appBar: header(context, strTitle: "Notifications",),
+      body: Container(
+        child: FutureBuilder(
+          future: retrieveNotifications(),
+          builder: (context, dataSnapshot){
+            if (!dataSnapshot.hasData) {
+             return CircularProgressIndicator();
             }
-          }),
+
+            return ListView(children:dataSnapshot.data,);
+          },
+        ),
+      ),
     );
   }
 
-  getFeed() async {
-    List<ActivityFeedItem> items = [];
+  retrieveNotifications() async{
+      QuerySnapshot querySnapshot = await activityFeedReference.document(currentUser.id)
+          .collection("feedItems").orderBy("timestamp", descending: true)
+          .limit(60).getDocuments();
 
-    var snap = await Firestore.instance.collection('insta_a_feed').document(currentUser.id)
-        .collection("items").orderBy("timestamp",descending: true)
-        .getDocuments();
+      List<NotificationsItem> notificationsItem = [];
+      
+      querySnapshot.documents.forEach((document) {
+        notificationsItem.add(NotificationsItem.fromDocument(document));
+      });
 
-    for (var doc in snap.documents) {
-      items.add(ActivityFeedItem.fromDocument(doc));
-    }
-    return items;
+      return notificationsItem;
   }
-
-  // ensures state is kept when switching pages
-  @override
-  bool get wantKeepAlive => true;
-
 }
 
-class ActivityFeedItem extends StatelessWidget {
+ String notificationItemText;
+ Widget mediaPreview;
+
+
+class NotificationsItem extends StatelessWidget {
   final String username;
-  final String userId;
-  final String type; // types include liked photo, follow user, comment on photo
-  final String mediaUrl;
-  final String mediaId;
-  final String userProfileImg;
+  final String type;
   final String commentData;
+  final String postId;
+  final String userId;
+  final String userProfileImg;
+  final String url;
   final Timestamp timestamp;
 
-  ActivityFeedItem(
-      {this.username,
-      this.userId,
-      this.type,
-      this.mediaUrl,
-      this.mediaId,
-      this.userProfileImg,
-      this.commentData,
-      this.timestamp});
+  NotificationsItem({this.username, this.type, this.commentData, this.postId, this.userId, this.userProfileImg, this.url, this.timestamp,});
 
-  factory ActivityFeedItem.fromDocument(DocumentSnapshot document) {
-    return ActivityFeedItem(
-      username: document['username'],
-      userId: document['userId'],
-      type: document['type'],
-      mediaUrl: document['mediaUrl'],
-      mediaId: document['postId'],
-      userProfileImg: document['userProfileImg'],
-      commentData: document["commentData"],
-      timestamp: document["timestamp"],
+
+  factory NotificationsItem.fromDocument(DocumentSnapshot documentSnapshot) {
+    return NotificationsItem(
+      username: documentSnapshot['username'],
+      type: documentSnapshot['type'],
+      commentData: documentSnapshot["commentData"],
+      postId: documentSnapshot['postId'],
+      userId: documentSnapshot['userId'],
+      userProfileImg: documentSnapshot['userProfileImg'],
+      url: documentSnapshot["url"],
+      timestamp: documentSnapshot["timestamp"],
     );
   }
 
-  Widget mediaPreview = Container();
-  String actionText;
+  @override
+  Widget build(BuildContext context)
+  {
 
-  void configureItem(BuildContext context) {
-    if (type == "like" || type == "comment") {
+    configureMediaPreview(context);
+
+
+  return Padding(
+    padding: EdgeInsets.only(bottom: 2.0),
+    child: Container(
+      color: Colors.black54,
+      child: ListTile(
+        title: GestureDetector(
+          onTap: ()=> displayUserProfile(context, userProfileId: userId ) ,
+          child: RichText(
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 14.0,color: Colors.white
+              ),
+              children: [
+                TextSpan(text: username, style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(
+                  text: " $notificationItemText"
+                ),
+              ]
+            ),
+          ),
+        ),
+
+        leading: CircleAvatar(
+          radius: 23.0,
+          backgroundImage: NetworkImage(userProfileImg),
+        ) ,
+        subtitle: Text(tAgo.format(timestamp.toDate()),
+        overflow: TextOverflow.ellipsis ,),
+        trailing: mediaPreview,
+      ),
+    ),
+  );
+  }
+
+  configureMediaPreview(context){
+
+
+    if (type == "comment" || type == "like")
+    {
+
       mediaPreview = GestureDetector(
-        onTap: () {
-          openImage(context, mediaId);
-        },
+        onTap: ()=> displayFullPost(context),
         child: Container(
-          height: 45.0,
-          width: 45.0,
+          height: 50.0,
+          width: 50.0,
           child: AspectRatio(
-            aspectRatio: 487 / 451,
+              aspectRatio: 16/9,
             child: Container(
               decoration: BoxDecoration(
-                  image: DecorationImage(
-                fit: BoxFit.fill,
-                alignment: FractionalOffset.topCenter,
-                image: NetworkImage(mediaUrl),
-              )),
+                image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(url)),
+              ),
             ),
           ),
         ),
       );
     }
-
-    if (type == "like") {
-      actionText = " liked your post.";
-    } else if (type == "follow")
-    {
-      actionText = " starting following you.";
-    } else if (type == "comment")
-    {
-      actionText = " commented: $commentData";
-    } else
+    else
       {
-      actionText = "Error - invalid activityFeed type: $type";
+
+        mediaPreview = Text("");
+      }
+
+
+    if (type == "like")
+    {
+      notificationItemText = " liked your post.";
+
     }
+    else if (type == "follow")
+
+    {
+      notificationItemText = " started following you.";
+
+    }
+    else if (type == "comment")
+
+    {
+      notificationItemText = "replied: $commentData";
+
+    } else
+    {
+      notificationItemText = "Error - invalid activityFeed type: $type";
+    }
+
+
   }
 
-  @override
-  Widget build(BuildContext context) {
-    configureItem(context);
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 15.0),
-          child: CircleAvatar(
-            radius: 23.0,
-            backgroundImage: NetworkImage(userProfileImg),
-          ),
-
-        ),
-        Expanded(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              GestureDetector(
-                child: Text(
-                  username,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onTap: ()=> openProfile(context, userProfileId: userId )
-                ,
-              ),
-              Flexible(
-                child: Container(
-                  child: Text(
-                    actionText,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        Container(
-            child: Align(
-                child: Padding(
-                  child: mediaPreview,
-                  padding: EdgeInsets.all(15.0),
-                ),
-                alignment: AlignmentDirectional.bottomEnd))
-      ],
-    );
+  displayFullPost(context){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreenPage(postId: postId,userId: userId, )));
   }
-}
 
-openProfile(BuildContext context, {String userProfileId}){
-
-  //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(userProfileId: userProfileId,)));
-}
-
-openImage(BuildContext context, String imageId) {
-  print("the image id is $imageId");
-  Navigator.of(context)
-      .push(MaterialPageRoute<bool>(builder: (BuildContext context) {
-    return Center(
-      child: Scaffold(
-          appBar: AppBar(
-            title: Text('Photo',
-                style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
-            backgroundColor: Colors.white,
-          ),
-          body: ListView(
-            children: <Widget>[
-              Container(
-               // child: ImagePostFromId(id: imageId),
-              ),
-            ],
-          )),
-    );
-  }));
-
-
+  displayUserProfile(BuildContext context, {String userProfileId}){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(userProfileId: userProfileId,)));
+  }
 }
