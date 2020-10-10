@@ -14,7 +14,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
         title: AppLogo(),
     brightness: Brightness.light,
           elevation: 1.0,
-    backgroundColor: Colors.white,
+          backgroundColor: Colors.white,
         ),
     );
   }

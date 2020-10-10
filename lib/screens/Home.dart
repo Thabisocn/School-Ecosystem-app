@@ -7,6 +7,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/login.dart';
+import 'package:quizapp/shared/loader.dart';
 import 'package:quizapp/widgets/widget.dart';
 
 class Home extends StatefulWidget {
@@ -30,7 +31,7 @@ class _HomeState extends State<Home> {
       future: usersReference.document(widget.userProfileId).get(),
       builder: (context, datasnapshot) {
         if (!datasnapshot.hasData) {
-          return CircularProgressIndicator();
+          return LoadingScreen();
         }
         User user = User.fromDocument(datasnapshot.data);
         return Padding(
@@ -39,7 +40,11 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-
+                  CircleAvatar(
+                    radius: 40.0,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: CachedNetworkImageProvider(user.url),
+                  ),
                   Spacer(),
                   Container(
                     width: 100.0,
@@ -66,7 +71,7 @@ class _HomeState extends State<Home> {
       future: usersReference.document(widget.userProfileId).get(),
       builder: (context, datasnapshot) {
         if (!datasnapshot.hasData) {
-          return CircularProgressIndicator();
+          return LoadingScreen();
         }
         User user = User.fromDocument(datasnapshot.data);
 
@@ -88,7 +93,11 @@ class _HomeState extends State<Home> {
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(top: 5.0),
-
+                    child: Text(
+                      user.username, style: TextStyle(fontSize: 25.0,
+                        color: Colors.black26,
+                        fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
 
@@ -188,8 +197,8 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: AppLogo(),
         brightness: Brightness.light,
-        elevation: 1.0,
-        backgroundColor: Colors.white,
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
         //brightness: Brightness.li,
       ),
 

@@ -41,6 +41,31 @@ class LoginScreenState extends State<LoginScreen> {
   PageController pageController;
   int getPageIndex = 0;
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    pageController = PageController();
+
+    gSignIn.onCurrentUserChanged.listen((gSigninAccount) {
+      controlSignIn(gSigninAccount);
+    }, onError: (gError)
+    {
+      print("Error Message: " + gError);
+    });
+
+    gSignIn.signInSilently(suppressErrors: false).then((gSignInAccount) {
+      controlSignIn(gSignInAccount);
+    }).catchError((gError){
+      print("Error Message: " + gError);
+    });
+
+
+
+
+  }
+
   controlSignIn(GoogleSignInAccount signInAccount) async{
     if (signInAccount != null) {
 
@@ -74,12 +99,8 @@ class LoginScreenState extends State<LoginScreen> {
         "email": gCurrentUser.email,
         "bio": "",
         "timestamp": timestamp,
-
-
       });
-
       documentSnapshot = await usersReference.document(gCurrentUser.id).get();
-
     }
     currentUser = User.fromDocument(documentSnapshot);
   }
@@ -108,7 +129,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   onTapChangePage(int pageIndex){
 
-    pageController.animateToPage(pageIndex, duration: Duration(milliseconds: 400), curve: Curves.bounceInOut);
+    pageController.animateToPage(pageIndex, duration: Duration(milliseconds: 400), curve: Curves.bounceInOut,);
   }
 
   Scaffold buildHomeScreen(){
@@ -148,29 +169,7 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
 
-    pageController = PageController();
-
-          gSignIn.onCurrentUserChanged.listen((gSigninAccount) { 
-            controlSignIn(gSigninAccount);
-          }, onError: (gError)
-          {
-            print("Error Message: " + gError);
-          });
-
-          gSignIn.signInSilently(suppressErrors: false).then((gSignInAccount) {
-            controlSignIn(gSignInAccount);
-          }).catchError((gError){
-            print("Error Message: " + gError);
-          });
-
-
-
-
-  }
 
   @override
   Scaffold buildSignInScreen() {

@@ -3,7 +3,9 @@ import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/Home.dart';
+import 'package:quizapp/main.dart';
 import 'package:quizapp/screens/login.dart';
+
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -75,7 +77,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       key: _scaffoldGlobalKey,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        elevation: 1.0,
+        backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text("Edit Profile", style: TextStyle(
           color: Colors.black,
@@ -91,7 +94,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
               children: <Widget>[
                 Padding(
                     padding: EdgeInsets.only(top: 15.0, bottom: 7.0),
-
+                    child: CircleAvatar(
+                      radius: 52.0,
+                     // backgroundImage: CachedNetworkImageProvider(user.url),
+                    ) ,
                 ),
                 Padding(padding: EdgeInsets.all(16.0),
                 child: Column(

@@ -8,10 +8,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quizapp/models/user.dart';
-import 'package:quizapp/screens/login.dart';
+import 'package:quizapp/main.dart';
 import 'package:quizapp/widgets/ProgressWidget.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:async';
+import 'package:quizapp/screens/login.dart';
 
 import 'dart:io';
 import 'location.dart';

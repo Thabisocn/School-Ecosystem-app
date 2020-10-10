@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/activity_feed.dart';
 import 'package:quizapp/screens/edit_profile_page.dart';
-import 'package:quizapp/screens/login.dart';
+import 'package:quizapp/main.dart';
 import 'package:quizapp/screens/search_page.dart';
 import 'package:quizapp/shared/loader.dart';
 import 'package:quizapp/widgets/HeaderWidget.dart';
 import 'package:quizapp/widgets/widget.dart';
+import 'package:quizapp/screens/login.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String userProfileId;
@@ -38,7 +39,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-
+                    CircleAvatar(
+                      radius: 40.0,
+                      backgroundColor: Colors.grey,
+                      backgroundImage: CachedNetworkImageProvider(user.url),
+                    ),
 
                     Expanded(
                       flex: 1,

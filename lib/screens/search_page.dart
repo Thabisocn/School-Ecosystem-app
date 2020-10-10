@@ -1,108 +1,139 @@
-import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:quizapp/models/user.dart';
-import 'dart:async';
-import 'package:quizapp/screens/profile.dart';
-
+import 'package:quizapp/screens/login.dart';
 
 class SearchPage extends StatefulWidget {
-  _SearchPage createState() => _SearchPage();
+  @override
+  _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPage extends State<SearchPage> with AutomaticKeepAliveClientMixin<SearchPage>{
-  Future<QuerySnapshot> userDocs;
+class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMixin<SearchPage>{
 
-  buildSearchField() {
+  TextEditingController searchTextEditingController = TextEditingController();
+  Future<QuerySnapshot> futureSearchResults;
+
+  emptyTheTextFormField(){
+    searchTextEditingController.clear();
+  }
+
+  controlSearching(String str){
+    Future<QuerySnapshot> allUsers = usersReference.where("profileName", isGreaterThanOrEqualTo: str).getDocuments();
+    setState(() {
+      futureSearchResults = allUsers;
+    });
+  }
+
+  AppBar searchPageHeader(){
     return AppBar(
       backgroundColor: Colors.white,
-      title: Form(
-        child: TextFormField(
-          decoration: InputDecoration(labelText: 'Search for a user...'),
-          onFieldSubmitted: submit,
+      title: TextFormField(
+        style: TextStyle(fontSize: 18.0,color: Colors.white),
+        controller: searchTextEditingController,
+        decoration: InputDecoration(
+          hintText: "Search for a Student here...",hintStyle: TextStyle(color: Colors.grey),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black),
+          ),
+          filled: true,
+          prefixIcon: Icon(Icons.person_pin, color: Colors.grey, size: 30.0,),
+          suffixIcon: IconButton(icon: Icon(Icons.clear, color: Colors.grey,), onPressed: emptyTheTextFormField ,)
         ),
+
+        onFieldSubmitted: controlSearching,
       ),
     );
   }
 
-  ListView buildSearchResults(List<DocumentSnapshot> docs) {
-    List<UserSearchItem> userSearchItems = [];
+ Container displayNoSearchResultScreen(){
+    final Orientation orientation = MediaQuery.of(context).orientation;
+     return Container(
+     child: Center(
+       child: ListView(
+         shrinkWrap: true,
+         children: <Widget>[
+           Icon(Icons.group, color: Colors.grey, size: 200.0,),
+           Text(
+             "Search Users",
+             textAlign: TextAlign.center,
+             style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500, fontSize: 65.0),
+           ),
+         ],
+       ),
+     ),
+    );
 
-    docs.forEach((DocumentSnapshot doc) {
-      User user = User.fromDocument(doc);
-      UserSearchItem searchItem = UserSearchItem(user);
-      userSearchItems.add(searchItem);
-    });
+  }
 
-    return ListView(
-      children: userSearchItems,
+  displayUsersFoundScreen(){
+    return FutureBuilder(
+        future: futureSearchResults,
+        builder: (context, dataSnapshot)
+    {
+      if (!dataSnapshot.hasData)
+      {
+        return CircularProgressIndicator();
+
+      }
+      List<UserResult> searchUsersResult = [];
+      dataSnapshot.data.documents.forEach((document)
+      {
+
+        User eachUser = User.fromDocument(document);
+        UserResult userResult = UserResult(eachUser);
+        searchUsersResult.add(userResult);
+      });
+        return ListView(children: searchUsersResult,);
+    },
     );
   }
 
-  void submit(String searchValue) async {
-    Future<QuerySnapshot> users = Firestore.instance
-        .collection("users")
-        .where('displayName', isGreaterThanOrEqualTo: searchValue)
-        .getDocuments();
-
-    setState(() {
-      userDocs = users;
-    });
-  }
-
-  Widget build(BuildContext context) {
-    super.build(context); // reloads state when opened again
-
-    return Scaffold(
-      appBar: buildSearchField(),
-      body: userDocs == null
-          ? Text("")
-          : FutureBuilder<QuerySnapshot>(
-              future: userDocs,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return buildSearchResults(snapshot.data.documents);
-                } else {
-                  return Container(
-                      alignment: FractionalOffset.center,
-                      child: CircularProgressIndicator());
-                }
-              }),
-    );
-  }
-
-  // ensures state is kept when switching pages
-  @override
   bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: searchPageHeader(),
+      body: futureSearchResults == null ? displayNoSearchResultScreen() : displayUsersFoundScreen(),
+    );
+  }
 }
 
-class UserSearchItem extends StatelessWidget {
-  final User user;
+class UserResult extends StatelessWidget {
 
-  const UserSearchItem(this.user);
+  final User eachUser;
+  UserResult(this.eachUser);
+
 
   @override
   Widget build(BuildContext context) {
-    TextStyle boldStyle = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-    );
-
-    return GestureDetector(
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(user.url),
-            backgroundColor: Colors.grey,
-          ),
-          title: Text(user.username, style: boldStyle),
-          subtitle: Text(user.username),
-        ),
-        onTap: () {
-          openProfile(context, userProfileId: user.id);
-        });
-  }
-
-  openProfile(BuildContext context, {String userProfileId}){
-   
-   // Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(userProfileId: userProfileId,)));
+    return Padding(
+        padding: EdgeInsets.all(3.0),
+    child: Container(
+      color: Colors.black54,
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            onTap: ()=> print("tapped"),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.grey,
+                backgroundImage: CachedNetworkImageProvider(eachUser.url),),
+              title: Text(eachUser.profileName, style: TextStyle(
+                color: Colors.orange, fontSize: 16.0,fontWeight: FontWeight.bold,
+              ),),
+              subtitle: Text(eachUser.username, style: TextStyle(
+                color: Colors.orange, fontSize: 13.0,
+              ),),
+              ),
+            ),
+        ],
+      ),
+    ),);
   }
 }
