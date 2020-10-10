@@ -370,7 +370,7 @@ class _PostState extends State<Post> {
     Navigator.push(context, MaterialPageRoute(builder: (context)
     {
 
-      return CommentScreen(postId: postId,postOwner: ownerId,postMediaUrl: url,);
+      return CommentScreen(postId: postId,postOwnerId: ownerId,postImageUrl: url,);
     }
     ));
   }

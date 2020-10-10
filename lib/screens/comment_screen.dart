@@ -1,188 +1,158 @@
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:quizapp/main.dart';
-import "dart:async";
 
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:quizapp/screens/login.dart';
+import 'package:quizapp/widgets/HeaderWidget.dart';
+import 'package:timeago/timeago.dart' as tAgo;
 
 
 class CommentScreen extends StatefulWidget {
-  final String postId;
-  final String postOwner;
-  final String postMediaUrl;
 
-  const CommentScreen({this.postId, this.postOwner, this.postMediaUrl});
+  final String postId;
+  final String postOwnerId;
+  final String postImageUrl;
+  TextEditingController commentTextEditingController = TextEditingController();
+
+
+  CommentScreen({this.postId, this.postOwnerId, this.postImageUrl});
+
+
   @override
-  _CommentScreenState createState() => _CommentScreenState(
-      postId: this.postId,
-      postOwner: this.postOwner,
-      postMediaUrl: this.postMediaUrl);
+  CommentScreenState createState() => CommentScreenState(postId: postId, postOwnerId: postOwnerId, postImageUrl: postImageUrl );
 }
 
-class _CommentScreenState extends State<CommentScreen> {
+class CommentScreenState extends State<CommentScreen> {
+
   final String postId;
-  final String postOwner;
-  final String postMediaUrl;
+  final String postOwnerId;
+  final String postImageUrl;
+  TextEditingController commentTextEditingController = TextEditingController();
 
-  bool didFetchComments = false;
-  List<Comment> fetchedComments = [];
+  CommentScreenState({this.postId, this.postOwnerId, this.postImageUrl});
 
-  final TextEditingController _commentController = TextEditingController();
+  displayComments(){
+    return StreamBuilder(
+        stream: commentsReference.document(postId).collection("comments").orderBy("timestamp", descending: false).snapshots(),
+      builder: (context, dataSnapshot){
+          if (!dataSnapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+          List<Comment> comments = [];
+          dataSnapshot.data.documents.forEach((document){
 
-  _CommentScreenState({this.postId, this.postOwner, this.postMediaUrl});
+            comments.add(Comment.fromDocument(document));
+          });
+
+          return ListView(
+            children: comments,
+
+          );
+      },
+    );
+  }
+
+  saveComment(){
+    commentsReference.document(postId).collection("comments").add({
+      "username": currentUser.username,
+      "comment": commentTextEditingController.text,
+      "timestamp": DateTime.now(),
+      "url": currentUser.url,
+      "userId": currentUser.id,
+
+    });
+
+    bool isNotPostOwner = postOwnerId != currentUser.id;
+    if (isNotPostOwner)
+    {
+      activityFeedReference.document(postOwnerId).collection("feedItems").add({
+        "type": "comment",
+        "commentDate": timestamp,
+        "postId": postId,
+        "userId": currentUser.id,
+        "username": currentUser.username,
+        "userProfileImg":currentUser.url,
+        "url":postImageUrl
+
+      });
+    }
+    commentTextEditingController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Comments",
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
-      ),
-      body: buildPage(),
-    );
-  }
+          appBar: header(context,strTitle: "Comments"),
+      body: Column(
+        children: <Widget>[
+          Expanded(child: displayComments()),
+          Divider(),
+          ListTile(
+            title: TextFormField(
+                controller: commentTextEditingController,
+              decoration: InputDecoration(
+                labelText: "Write comment here ...",
+                labelStyle: TextStyle(color: Colors.black),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
 
-  Widget buildPage() {
-    return Column(
-      children: [
-        Expanded(
-          child:
-          buildComments(),
-        ),
-        Divider(),
-        ListTile(
-          title: TextFormField(
-            controller: _commentController,
-            decoration: InputDecoration(labelText: 'Write a comment...'),
-            onFieldSubmitted: addComment,
+              ),
+              style: TextStyle(color: Colors.black),
+            ),
+            trailing: OutlineButton(
+              onPressed: saveComment,
+              borderSide: BorderSide.none,
+              child: Text("Comment", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
+            ),
           ),
-          trailing: OutlineButton(onPressed: (){addComment(_commentController.text);}, borderSide: BorderSide.none, child: Text("Post"),),
-        ),
-      ],
+        ],
+      ),
     );
-  }
-
-
-  Widget buildComments() {
-    if (this.didFetchComments == false){
-      return FutureBuilder<List<Comment>>(
-          future: getComments(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Container(
-                  alignment: FractionalOffset.center,
-                  child: CircularProgressIndicator());
-
-            this.didFetchComments = true;
-            this.fetchedComments = snapshot.data;
-            return ListView(
-              children: snapshot.data,
-            );
-          });
-    } else {
-      // for optimistic updating
-      return ListView(
-          children: this.fetchedComments
-      );
-    }
-  }
-
-  Future<List<Comment>> getComments() async {
-    List<Comment> comments = [];
-
-    QuerySnapshot data = await Firestore.instance
-        .collection("appstract_comments")
-        .document(postId)
-        .collection("comments")
-        .getDocuments();
-    data.documents.forEach((DocumentSnapshot doc) {
-      comments.add(Comment.fromDocument(doc));
-    });
-    return comments;
-  }
-
-  addComment(String comment) {
-    _commentController.clear();
-    Firestore.instance
-        .collection("appstract_comments")
-        .document(postId)
-        .collection("comments")
-        .add({
-      "username": currentUser.username,
-      "comment": comment,
-      "timestamp": DateTime.now(),
-      "avatarUrl": currentUser.url,
-      "userId": currentUser.id
-    });
-
-    //adds to postOwner's activity feed
-    Firestore.instance
-        .collection("insta_a_feed")
-        .document(postOwner)
-        .collection("items")
-        .add({
-      "username": currentUser.username,
-      "userId": currentUser.id,
-      "type": "comment",
-      "userProfileImg": currentUser.url,
-      "commentData": comment,
-      "timestamp": DateTime.now(),
-      "postId": postId,
-      "mediaUrl": postMediaUrl,
-    });
-
-    // add comment to the current listview for an optimistic update
-    setState(() {
-      fetchedComments = List.from(fetchedComments)..add(Comment(
-          username: currentUser.username,
-          comment: comment,
-          timestamp: Timestamp.now(),
-          avatarUrl: currentUser.url,
-          userId: currentUser.id
-      ));
-    });
   }
 }
 
 class Comment extends StatelessWidget {
+
   final String username;
   final String userId;
-  final String avatarUrl;
+  final String url;
   final String comment;
   final Timestamp timestamp;
 
-  Comment(
-      {this.username,
-        this.userId,
-        this.avatarUrl,
-        this.comment,
-        this.timestamp});
+  Comment({this.username,this.userId, this.url, this.comment, this.timestamp});
 
   factory Comment.fromDocument(DocumentSnapshot document) {
     return Comment(
       username: document['username'],
       userId: document['userId'],
+      url: document["url"],
       comment: document["comment"],
       timestamp: document["timestamp"],
-      avatarUrl: document["avatarUrl"],
+
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        ListTile(
-          title: Text(comment),
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(avatarUrl),
-          ),
+    return Padding(
+    padding: EdgeInsets.only(bottom: 6.0),
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(username + ": " + comment, style: TextStyle(fontSize: 18.0, color: Colors.black),),
+              leading: CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(url),
+              ),
+              subtitle: Text(tAgo.format(timestamp.toDate()), style: TextStyle(color: Colors.black) ,) ,
+            ),
+          ],
         ),
-        Divider(),
-      ],
+      ),
+
     );
   }
 }
