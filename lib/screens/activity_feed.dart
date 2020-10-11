@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quizapp/screens/PostScreenPage.dart';
 import 'package:quizapp/screens/login.dart';
 import 'package:quizapp/screens/screens.dart';
+import 'package:timeago/timeago.dart' as tAgo;
 
 
 class ActivityFeedPage extends StatefulWidget {
@@ -24,6 +26,7 @@ class _ActivityFeedPageState extends State<ActivityFeedPage> with AutomaticKeepA
         backgroundColor: Colors.blue,
       ),
       body: buildActivityFeed(),
+
     );
   }
 
@@ -31,14 +34,11 @@ class _ActivityFeedPageState extends State<ActivityFeedPage> with AutomaticKeepA
     return Container(
       child: FutureBuilder(
           future: getFeed(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Container(
-                  alignment: FractionalOffset.center,
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: CircularProgressIndicator());
+          builder: (context, datasnapshot) {
+            if (!datasnapshot.hasData)
+              return CircularProgressIndicator();
             else {
-              return ListView(children: snapshot.data);
+              return ListView(children: datasnapshot.data);
             }
           }),
     );
@@ -100,11 +100,11 @@ class ActivityFeedItem extends StatelessWidget {
   String actionText;
 
   void configureItem(BuildContext context) {
+
+
     if (type == "like" || type == "comment") {
       mediaPreview = GestureDetector(
-        onTap: () {
-          openImage(context, postId);
-        },
+        onTap: ()=> openImage(context),
         child: Container(
           height: 45.0,
           width: 45.0,
@@ -121,6 +121,9 @@ class ActivityFeedItem extends StatelessWidget {
           ),
         ),
       );
+    }
+    else{
+      mediaPreview = Text("");
     }
 
     if (type == "like") {
@@ -140,48 +143,32 @@ class ActivityFeedItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     configureItem(context);
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 15.0),
-          child: CircleAvatar(
-            radius: 23.0,
-            backgroundImage: NetworkImage(userProfileImg),
+    return Padding(
+        padding: EdgeInsets.only(bottom: 2.0),
+      child: Container(
+        color: Colors.white,
+        child: ListTile(
+          title: GestureDetector(
+            onTap: ()=> openProfile(context, userProfileId: userId),
+            child: RichText(
+                overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 14.0, color: Colors.black
+              ),
+              children: [
+                TextSpan(text: username, style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan( text: " $actionText"),
+              ],
+            ),),
           ),
 
+          leading: CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(userProfileImg),
+          ) ,
+          subtitle: Text(tAgo.format(timestamp.toDate()),overflow: TextOverflow.ellipsis ,) ,
         ),
-        Expanded(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              GestureDetector(
-                child: Text(
-                  username,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onTap: ()=> openProfile(context, userProfileId: userId )
-                ,
-              ),
-              Flexible(
-                child: Container(
-                  child: Text(
-                    actionText,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        Container(
-            child: Align(
-                child: Padding(
-                  child: mediaPreview,
-                  padding: EdgeInsets.all(15.0),
-                ),
-                alignment: AlignmentDirectional.bottomEnd))
-      ],
+      ),
     );
   }
 }
@@ -191,8 +178,8 @@ openProfile(BuildContext context, {String userProfileId}){
   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(userProfileId: userProfileId,)));
 }
 
-openImage(BuildContext context, String imageId) {
-  //Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreenPage(postId: postId,userId: userId, )));
+openImage(context) {
+ // Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreenPage(postId: postIf,)));
 
 
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/screens/login.dart';
 import 'package:quizapp/widgets/HeaderWidget.dart';
 import 'package:quizapp/widgets/PostWidget.dart';
+import 'package:quizapp/screens/activity_feed.dart';
 
 class PostScreenPage extends StatelessWidget {
 
