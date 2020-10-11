@@ -179,7 +179,7 @@ openProfile(BuildContext context, {String userProfileId}){
 }
 
 openImage(context) {
- // Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreenPage(postId: postIf,)));
+ // Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreenPage(postId: postId,userId: userId,)));
 
 
 }

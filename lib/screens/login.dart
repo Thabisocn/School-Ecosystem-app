@@ -79,7 +79,7 @@ class LoginScreenState extends State<LoginScreen> {
         isSignedIn = true;
       });
 
-      configureRealTimePushNotifications();
+
 
     }
     else
@@ -92,13 +92,13 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   configureRealTimePushNotifications(){
-    
+
     final GoogleSignInAccount gUser = gSignIn.currentUser;
     if (Platform.isIOS)
     {
       getIOSPermissions();
     }
-    
+
     _firebaseMessaging.getToken().then((token) {
       usersReference.document(gUser.id).updateData({"androidNotificationToken" : token});
     });
@@ -126,9 +126,11 @@ class LoginScreenState extends State<LoginScreen> {
 
   getIOSPermissions(){
 
-    _firebaseMessaging.onIosSettingsRegistered.listen((settigs) {
+    _firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(alert: true, badge: true, sound: true));
 
-      print("Setings Registered : $settigs");
+    _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
+
+      print("Settings Registered : $settings");
     });
   }
 

@@ -174,10 +174,10 @@ class _PostState extends State<Post> {
         context: mcontext,
       builder: (context){
           return SimpleDialog(
-            title: Text("WHat do you want?",style: TextStyle( color: Colors.black),),
+            title: Text("What do you want?",style: TextStyle( color: Colors.black),),
             children: <Widget>[
               SimpleDialogOption(
-                child: Text("Delete",style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                child: Text("Delete",style: TextStyle(color: Colors.black, ),),
                 onPressed: (){
                   Navigator.pop(context);
                   removeUserPOst();
@@ -185,7 +185,7 @@ class _PostState extends State<Post> {
               ),
               SimpleDialogOption(
 
-                child: Text("Cancel",style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                child: Text("Cancel",style: TextStyle(color: Colors.black,),),
                 onPressed: ()=> Navigator.pop(context),
 
               ),
@@ -208,7 +208,7 @@ class _PostState extends State<Post> {
     storageReference.child("post_$postId.jpg").delete();
 
     QuerySnapshot querySnapshot = await activityFeedReference.document(ownerId)
-    .collection("insta_a_feed").where("postId", isEqualTo: postId).getDocuments();
+    .collection("feedItems").where("postId", isEqualTo: postId).getDocuments();
 
     querySnapshot.documents.forEach((document) {
       if (document.exists) {

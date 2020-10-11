@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'main.dart';
+import 'package:quizapp/screens/login.dart';
 import 'dart:async';
-import 'profile_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'comment_screen.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -201,7 +200,7 @@ class _ImagePost extends State<ImagePost> {
 
   @override
   Widget build(BuildContext context) {
-    liked = (likes[googleSignIn.currentUser.id.toString()] == true);
+    liked = (likes[gSignIn.currentUser.id.toString()] == true);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -256,7 +255,7 @@ class _ImagePost extends State<ImagePost> {
   }
 
   void _likePost(String postId2) {
-    var userId = googleSignIn.currentUser.id;
+    var userId = gSignIn.currentUser.id;
     bool _liked = likes[userId] == true;
 
     if (_liked) {
@@ -302,10 +301,10 @@ class _ImagePost extends State<ImagePost> {
         .collection("items")
         .document(postId)
         .setData({
-      "username": currentUserModel.username,
-      "userId": currentUserModel.id,
+      "username": currentUser.username,
+      "userId": currentUser.id,
       "type": "like",
-      "userProfileImg": currentUserModel.photoUrl,
+      "userProfileImg": currentUser.url,
       "mediaUrl": mediaUrl,
       "timestamp": DateTime.now(),
       "postId": postId,
@@ -354,8 +353,8 @@ void goToComments(
       .push(MaterialPageRoute<bool>(builder: (BuildContext context) {
     return CommentScreen(
       postId: postId,
-      postOwner: ownerId,
-      postMediaUrl: mediaUrl,
+      postOwnerId: ownerId,
+      postImageUrl: mediaUrl,
     );
   }));
 }

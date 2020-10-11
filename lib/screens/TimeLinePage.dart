@@ -20,7 +20,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
 
   List<Post> posts;
   List<String> followingLIst = [];
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   retrieveTimeLine() async{ 
      QuerySnapshot querySnapshot = await timelineReference.document(widget.gCurrentUser.id)
@@ -69,14 +69,14 @@ class _TimeLinePageState extends State<TimeLinePage> {
   @override
   Widget build(context) {
     return Scaffold(
-      key: scaffoldKey,
+      key: _scaffoldKey,
         appBar: AppBar(
         title: AppLogo(),
     brightness: Brightness.light,
           elevation: 1.0,
           backgroundColor: Colors.white,
         ),
-      body: RefreshIndicator(child: createUserTimeLine(),onRefresh: () => retrieveTimeLine(),),
+      body: RefreshIndicator(child: createUserTimeLine(),onRefresh: () => retrieveTimeLine()),
     );
   }
 }
