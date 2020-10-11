@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +43,8 @@ class LoginScreenState extends State<LoginScreen> {
   bool isSignedIn = false;
   PageController pageController;
   int getPageIndex = 0;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
   @override
@@ -74,6 +79,8 @@ class LoginScreenState extends State<LoginScreen> {
         isSignedIn = true;
       });
 
+      configureRealTimePushNotifications();
+
     }
     else
     {
@@ -82,6 +89,47 @@ class LoginScreenState extends State<LoginScreen> {
       });
     }
 
+  }
+
+  configureRealTimePushNotifications(){
+    
+    final GoogleSignInAccount gUser = gSignIn.currentUser;
+    if (Platform.isIOS)
+    {
+      getIOSPermissions();
+    }
+    
+    _firebaseMessaging.getToken().then((token) {
+      usersReference.document(gUser.id).updateData({"androidNotificationToken" : token});
+    });
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> msg) async
+      {
+
+        final String recipientId = msg["data"]["recipient"];
+        final String body = msg["notification"]["body"];
+
+        if (recipientId == gUser.id)
+        {
+        SnackBar snackBar = SnackBar(
+            backgroundColor: Colors.grey,
+          content: Text(body,style: TextStyle(color: Colors.black), overflow: TextOverflow.ellipsis,),
+        );
+
+        _scaffoldKey.currentState.showSnackBar(snackBar);
+
+        }
+      }
+    );
+  }
+
+  getIOSPermissions(){
+
+    _firebaseMessaging.onIosSettingsRegistered.listen((settigs) {
+
+      print("Setings Registered : $settigs");
+    });
   }
 
   saveUserInfoToFirestore() async{
@@ -100,6 +148,9 @@ class LoginScreenState extends State<LoginScreen> {
         "bio": "",
         "timestamp": timestamp,
       });
+      
+      await followersReference.document(gCurrentUser.id).collection("userFollowers").document(gCurrentUser.id).setData({});
+      
       documentSnapshot = await usersReference.document(gCurrentUser.id).get();
     }
     currentUser = User.fromDocument(documentSnapshot);
@@ -134,11 +185,13 @@ class LoginScreenState extends State<LoginScreen> {
 
   Scaffold buildHomeScreen(){
   //  return RaisedButton.icon(onPressed: logoutUser, icon: Icon(Icons.close), label: Text("Sign Out"));
+
     return Scaffold(
+      key: _scaffoldKey,
       body: PageView(
         children: <Widget>[
           Home(userProfileId: gSignIn.currentUser.id),
-          TimeLinePage(),
+          TimeLinePage(gCurrentUser: currentUser,),
           Uploader(gCurrentUser: currentUser,),
           TopicsScreen(),
           ProfileScreen(userProfileId: gSignIn.currentUser.id),
