@@ -1,65 +1,69 @@
-
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:http/http.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quizapp/screens/PostScreenPage.dart';
 import 'package:quizapp/screens/login.dart';
-import 'package:quizapp/screens/profile.dart';
-import 'package:quizapp/widgets/HeaderWidget.dart';
-import 'package:timeago/timeago.dart' as tAgo;
+import 'package:quizapp/screens/screens.dart';
+
 
 class ActivityFeedPage extends StatefulWidget {
   @override
   _ActivityFeedPageState createState() => _ActivityFeedPageState();
 }
 
-
-
-class _ActivityFeedPageState extends State<ActivityFeedPage> {
-
-
+class _ActivityFeedPageState extends State<ActivityFeedPage> with AutomaticKeepAliveClientMixin<ActivityFeedPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: header(context, strTitle: "Notifications",),
-      body: Container(
-        child: FutureBuilder(
-          future: retrieveNotifications(),
-          builder: (context, dataSnapshot){
-            if (!dataSnapshot.hasData) {
-             return CircularProgressIndicator();
-            }
+    super.build(context); // reloads state when opened again
 
-            return ListView(children:dataSnapshot.data,);
-          },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Activity Feed",
+          style: TextStyle(color: Colors.white),
         ),
+        backgroundColor: Colors.blue,
       ),
+      body: buildActivityFeed(),
     );
   }
 
-  retrieveNotifications() async{
-      QuerySnapshot querySnapshot = await activityFeedReference.document(currentUser.id)
-          .collection("feedItems").orderBy("timestamp", descending: true)
-          .limit(60).getDocuments();
-
-      List<NotificationsItem> notificationsItem = [];
-      
-      querySnapshot.documents.forEach((document) {
-        notificationsItem.add(NotificationsItem.fromDocument(document));
-      });
-
-      return notificationsItem;
+  buildActivityFeed() {
+    return Container(
+      child: FutureBuilder(
+          future: getFeed(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData)
+              return Container(
+                  alignment: FractionalOffset.center,
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: CircularProgressIndicator());
+            else {
+              return ListView(children: snapshot.data);
+            }
+          }),
+    );
   }
+
+  getFeed() async {
+    QuerySnapshot querySnapshot = await activityFeedReference.document(currentUser.id)
+        .collection("feedItems").orderBy("timestamp", descending: true)
+        .limit(60).getDocuments();
+
+    List<ActivityFeedItem> notificationsItem = [];
+
+    querySnapshot.documents.forEach((document) {
+      notificationsItem.add(ActivityFeedItem.fromDocument(document));
+    });
+    return notificationsItem;
+  }
+
+  // ensures state is kept when switching pages
+  @override
+  bool get wantKeepAlive => true;
+
 }
 
- String notificationItemText;
- Widget mediaPreview;
-
-
-class NotificationsItem extends StatelessWidget {
+class ActivityFeedItem extends StatelessWidget {
   final String username;
   final String type;
   final String commentData;
@@ -69,122 +73,126 @@ class NotificationsItem extends StatelessWidget {
   final String url;
   final Timestamp timestamp;
 
-  NotificationsItem({this.username, this.type, this.commentData, this.postId, this.userId, this.userProfileImg, this.url, this.timestamp,});
+  ActivityFeedItem(
+      {this.username,
+        this.type,
+        this.commentData,
+        this.postId,
+        this.userId,
+        this.userProfileImg,
+        this.url,
+        this.timestamp});
 
-
-  factory NotificationsItem.fromDocument(DocumentSnapshot documentSnapshot) {
-    return NotificationsItem(
-      username: documentSnapshot['username'],
-      type: documentSnapshot['type'],
-      commentData: documentSnapshot["commentData"],
-      postId: documentSnapshot['postId'],
-      userId: documentSnapshot['userId'],
-      userProfileImg: documentSnapshot['userProfileImg'],
-      url: documentSnapshot["url"],
-      timestamp: documentSnapshot["timestamp"],
+  factory ActivityFeedItem.fromDocument(DocumentSnapshot document) {
+    return ActivityFeedItem(
+      username: document['username'],
+      type: document['type'],
+      commentData: document["commentData"],
+      postId: document['postId'],
+      userId: document['userId'],
+      userProfileImg: document['userProfileImg'],
+      url: document["url"],
+      timestamp: document["timestamp"],
     );
   }
 
-  @override
-  Widget build(BuildContext context)
-  {
+  Widget mediaPreview = Container();
+  String actionText;
 
-    configureMediaPreview(context);
-
-
-  return Padding(
-    padding: EdgeInsets.only(bottom: 2.0),
-    child: Container(
-      color: Colors.black54,
-      child: ListTile(
-        title: GestureDetector(
-          onTap: ()=> displayUserProfile(context, userProfileId: userId ) ,
-          child: RichText(
-            overflow: TextOverflow.ellipsis,
-            text: TextSpan(
-              style: TextStyle(
-                fontSize: 14.0,color: Colors.white
-              ),
-              children: [
-                TextSpan(text: username, style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(
-                  text: " $notificationItemText"
-                ),
-              ]
-            ),
-          ),
-        ),
-
-        leading: CircleAvatar(
-          radius: 23.0,
-          backgroundImage: NetworkImage(userProfileImg),
-        ) ,
-        subtitle: Text(tAgo.format(timestamp.toDate()),
-        overflow: TextOverflow.ellipsis ,),
-        trailing: mediaPreview,
-      ),
-    ),
-  );
-  }
-
-  configureMediaPreview(context){
-
-
-    if (type == "comment" || type == "like")
-    {
-
+  void configureItem(BuildContext context) {
+    if (type == "like" || type == "comment") {
       mediaPreview = GestureDetector(
-        onTap: ()=> displayFullPost(context),
+        onTap: () {
+          openImage(context, postId);
+        },
         child: Container(
-          height: 50.0,
-          width: 50.0,
+          height: 45.0,
+          width: 45.0,
           child: AspectRatio(
-              aspectRatio: 16/9,
+            aspectRatio: 16/9,
             child: Container(
               decoration: BoxDecoration(
-                image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(url)),
-              ),
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    alignment: FractionalOffset.topCenter,
+                    image: NetworkImage(url),
+                  )),
             ),
           ),
         ),
       );
     }
-    else
-      {
 
-        mediaPreview = Text("");
-      }
-
-
-    if (type == "like")
+    if (type == "like") {
+      actionText = " liked your post.";
+    } else if (type == "follow")
     {
-      notificationItemText = " liked your post.";
-
-    }
-    else if (type == "follow")
-
+      actionText = " started following you.";
+    } else if (type == "comment")
     {
-      notificationItemText = " started following you.";
-
-    }
-    else if (type == "comment")
-
-    {
-      notificationItemText = "replied: $commentData";
-
+      actionText = " commented: $commentData";
     } else
     {
-      notificationItemText = "Error - invalid activityFeed type: $type";
+      actionText = "Error - invalid activityFeed type: $type";
     }
-
-
   }
 
-  displayFullPost(context){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreenPage(postId: postId,userId: userId, )));
-  }
+  @override
+  Widget build(BuildContext context) {
+    configureItem(context);
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(left: 20.0, right: 15.0),
+          child: CircleAvatar(
+            radius: 23.0,
+            backgroundImage: NetworkImage(userProfileImg),
+          ),
 
-  displayUserProfile(BuildContext context, {String userProfileId}){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(userProfileId: userProfileId,)));
+        ),
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              GestureDetector(
+                child: Text(
+                  username,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: ()=> openProfile(context, userProfileId: userId )
+                ,
+              ),
+              Flexible(
+                child: Container(
+                  child: Text(
+                    actionText,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Container(
+            child: Align(
+                child: Padding(
+                  child: mediaPreview,
+                  padding: EdgeInsets.all(15.0),
+                ),
+                alignment: AlignmentDirectional.bottomEnd))
+      ],
+    );
   }
+}
+
+openProfile(BuildContext context, {String userProfileId}){
+
+  Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(userProfileId: userProfileId,)));
+}
+
+openImage(BuildContext context, String imageId) {
+  //Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreenPage(postId: postId,userId: userId, )));
+
+
 }
