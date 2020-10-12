@@ -146,18 +146,18 @@ class _PostState extends State<Post> {
         bool isPostOwner = currentOnlineUserId == ownerId;
 
         return ListTile(
-          leading: CircleAvatar(backgroundImage: CachedNetworkImageProvider(user.url), backgroundColor: Colors.grey,),
+          leading: CircleAvatar(backgroundImage: CachedNetworkImageProvider(user.url),radius: 25, backgroundColor: Colors.grey,),
           title: GestureDetector(
             onTap: ()=>openProfile(context, userProfileId: user.id),
             child: Text(
               user.username,
               style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold),
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15.0,),
 
             ),
           ),
           subtitle: Text(
-            location, style: TextStyle(color: Colors.black),
+            location, style: TextStyle(color: Colors.black54, fontSize: 12.0,),
           ),
           trailing: isPostOwner ? IconButton(
             icon: Icon(Icons.more_vert, color: Colors.black,),
@@ -174,10 +174,10 @@ class _PostState extends State<Post> {
         context: mcontext,
       builder: (context){
           return SimpleDialog(
-            title: Text("What do you want?",style: TextStyle( color: Colors.black),),
+            title: Text("Do you want to delete?",style: TextStyle( color: Colors.black),),
             children: <Widget>[
               SimpleDialogOption(
-                child: Text("Delete",style: TextStyle(color: Colors.black, ),),
+                child: Text("Delete",style: TextStyle(color: Colors.black, fontSize: 16.0, ),),
                 onPressed: (){
                   Navigator.pop(context);
                   removeUserPOst();
@@ -185,7 +185,7 @@ class _PostState extends State<Post> {
               ),
               SimpleDialogOption(
 
-                child: Text("Cancel",style: TextStyle(color: Colors.black,),),
+                child: Text("Cancel",style: TextStyle(color: Colors.black, fontSize: 13.0,),),
                 onPressed: ()=> Navigator.pop(context),
 
               ),
@@ -308,13 +308,13 @@ class _PostState extends State<Post> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 40.0, left: 150.0)),
+            Padding(padding: EdgeInsets.only(top: 20.0, left: 150.0)),
             GestureDetector(
               onTap: ()=> controlUserLikePost(),
               child: Icon(
 
                 isLiked ? Icons.favorite : Icons.favorite_border,
-                size: 28.0,
+                size: 25.0,
                 color: Colors.blue,
               ),
             ),
@@ -324,7 +324,7 @@ class _PostState extends State<Post> {
               onTap: ()=> displayComment(context, postId: postId,ownerId: ownerId, url:url),
               child: Icon(
                Icons.chat_bubble_outline,
-                size: 28.0,
+                size: 25.0,
                 color: Colors.blue,
               ),
             ),
@@ -337,7 +337,7 @@ class _PostState extends State<Post> {
               margin: EdgeInsets.only(left: 16.0),
               child: Text(
                   "$likeCount likes",
-                style: TextStyle(color: Colors.black26, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black26, fontWeight: FontWeight.bold, fontSize: 16.0,),
 
               ),
             )
@@ -350,14 +350,14 @@ class _PostState extends State<Post> {
             Container(
               margin: EdgeInsets.only(left: 20.0),
               child: Text(
-                "$username: ",style: TextStyle(color: Colors.black),
+                "$username: ",style: TextStyle(color: Colors.black, fontSize: 16.0,),
               ),
 
             ),
 
             Expanded(
               child: Text(
-                description, style: TextStyle(color: Colors.grey,),
+                description, style: TextStyle(color: Colors.grey,fontSize: 16.0,),
               ),
             )
             
