@@ -87,14 +87,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: <Widget>[
               Container(
                 alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left:180.0, ) ,
+                padding: EdgeInsets.only(left:160.0, ) ,
                 child: Text(
                   user.username,style: TextStyle(fontSize: 19.0,color: Colors.black,),
                 ),
               ),
               Container(
                 alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(right: 55.0 ) ,
+                padding: EdgeInsets.only(right: 65.0 ) ,
                 child: Text(
                   user.email,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
                 ),
@@ -125,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         User user = User.fromDocument(datasnapshot.data);
         return Padding(
-          padding: EdgeInsets.only(left:150.0),
+          padding: EdgeInsets.only(left:130.0),
           child: Column(
             children: <Widget>[
               Row(

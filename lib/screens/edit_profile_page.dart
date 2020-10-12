@@ -118,7 +118,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     child: Text(
                       "Update",
                       style: TextStyle(
-                        color:Colors.black,fontSize: 16.0,
+                        color:Colors.white,fontSize: 16.0,
                       ),
                     ),
 
@@ -129,7 +129,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     onPressed: logOutUser,
                     child: Text("Logout",
                       style: TextStyle(
-                          color:Colors.red,
+                          color:Colors.white,
                           fontSize: 16.0),
                     ),
                   ),
