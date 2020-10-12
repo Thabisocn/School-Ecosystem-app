@@ -88,6 +88,8 @@ flutter:
     - assets/yoga_2.jpg
     - assets/yoga_3.jpg
     - assets/images/tamiat-logo-icon-color.png
+    - assets/images/MokoweLogo_SplashScreen-01.png
+    - assets/images/sign_in.png
     
 
   # The following line ensures that the Material Icons font is

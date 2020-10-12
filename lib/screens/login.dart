@@ -229,6 +229,7 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Scaffold buildSignInScreen() {
     return Scaffold(
+      backgroundColor: Color(0xff615dfa),
       body: Container(
         padding: EdgeInsets.all(30),
         decoration: BoxDecoration(),
@@ -236,23 +237,26 @@ class LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            FlutterLogo(
-              size: 150,
+            new Image(
+              image: new AssetImage("assets/images/MokoweLogo_SplashScreen-01.png"),
+              width:  100,
+              height:100,
             ),
             Text(
-              'Login to Start',
-              style: Theme.of(context).textTheme.headline,
+              'Welcome to Mokowe',
+              style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            Text('Your Tagline'),
+
+            Text('Your Tagline', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold), ),
             GestureDetector(
               onTap: ()=> loginUser(),
                 child: Container(
-                  width: 270.0,
-                  height: 65.0,
+                  width: 220.0,
+                  height: 45.0,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/images/google_signin_button.png"),
+                      image: AssetImage("assets/images/sign_in.png"),
                       fit: BoxFit.cover,
                       
                     ),
@@ -260,7 +264,6 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
 
               ),
-
             FutureBuilder<Object>(
               future: auth.appleSignInAvailable,
               builder: (context, snapshot) {
@@ -278,7 +281,7 @@ class LoginScreenState extends State<LoginScreen> {
                 }
               },
             ),
-            LoginButton(text: 'Continue as Guest', loginMethod: auth.anonLogin)
+
           ],
         ),
       ),

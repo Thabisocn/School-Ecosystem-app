@@ -15,6 +15,7 @@ void main() {
   runApp(MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         StreamProvider<FirebaseUser>.value(value: AuthService().user),
       ],
       child: MaterialApp(
+
         // Firebase Analytics
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
@@ -55,5 +57,9 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+
+
   }
+
 }
+
