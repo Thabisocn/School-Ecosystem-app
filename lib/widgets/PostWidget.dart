@@ -308,14 +308,14 @@ class _PostState extends State<Post> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 40.0, left: 250.0)),
+            Padding(padding: EdgeInsets.only(top: 40.0, left: 150.0)),
             GestureDetector(
               onTap: ()=> controlUserLikePost(),
               child: Icon(
 
                 isLiked ? Icons.favorite : Icons.favorite_border,
                 size: 28.0,
-                color: Colors.pink,
+                color: Colors.blue,
               ),
             ),
 
@@ -325,7 +325,7 @@ class _PostState extends State<Post> {
               child: Icon(
                Icons.chat_bubble_outline,
                 size: 28.0,
-                color: Colors.grey,
+                color: Colors.blue,
               ),
             ),
           ],
@@ -334,10 +334,10 @@ class _PostState extends State<Post> {
         Row(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(left: 300.0),
+              margin: EdgeInsets.only(left: 16.0),
               child: Text(
                   "$likeCount likes",
-                style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black26, fontWeight: FontWeight.bold),
 
               ),
             )
@@ -350,10 +350,11 @@ class _PostState extends State<Post> {
             Container(
               margin: EdgeInsets.only(left: 20.0),
               child: Text(
-                "$username ",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),
+                "$username: ",style: TextStyle(color: Colors.black),
               ),
 
             ),
+
             Expanded(
               child: Text(
                 description, style: TextStyle(color: Colors.grey,),

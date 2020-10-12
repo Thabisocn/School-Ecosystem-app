@@ -82,16 +82,87 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         User user = User.fromDocument(datasnapshot.data);
         return Padding(
-          padding: EdgeInsets.only(top:17.0),
+          padding: EdgeInsets.only(top:10.0),
+          child: Column(
+            children: <Widget>[
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left:180.0, ) ,
+                child: Text(
+                  user.username,style: TextStyle(fontSize: 19.0,color: Colors.black,),
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.only(right: 55.0 ) ,
+                child: Text(
+                  user.email,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
+                ),
+              ),
+
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(top: 3.0) ,
+                child: Text(
+                  user.bio,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        );
+
+      },
+    );
+  }
+
+  createProfileDpView(){
+    return FutureBuilder(
+      future: usersReference.document(widget.userProfileId).get(),
+      builder:(context, datasnapshot){
+        if (!datasnapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        User user = User.fromDocument(datasnapshot.data);
+        return Padding(
+          padding: EdgeInsets.only(left:150.0),
           child: Column(
             children: <Widget>[
               Row(
                 children: <Widget>[
+
                   CircleAvatar(
-                    radius: 45.0,
+                    radius: 60.0,
                     backgroundColor: Colors.grey,
                     backgroundImage: CachedNetworkImageProvider(user.url),
                   ),
+                ],
+              ),
+            ],
+          ),
+        );
+
+      },
+    );
+  }
+
+
+  createProfileMiddleView(){
+    return FutureBuilder(
+      future: usersReference.document(widget.userProfileId).get(),
+      builder:(context, datasnapshot){
+        if (!datasnapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        User user = User.fromDocument(datasnapshot.data);
+        return Padding(
+          padding: EdgeInsets.only(top:20.0),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+
                   Expanded(
                     flex: 1,
                     child: Column(
@@ -100,7 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            createColumns("posts", countPost),
+                            createColumns("Questions", countPost),
                             createColumns("followers", countTotalFollowers),
                             createColumns("following", countTotalFollowings),
                           ],
@@ -118,20 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
 
 
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 13.0, ) ,
-                child: Text(
-                  user.username,style: TextStyle(fontSize: 14.0,color: Colors.black,fontWeight: FontWeight.bold),
-                ),
-              ),
-              Container(
-                alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(top: 5.0 ) ,
-                child: Text(
-                  user.email,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
-                ),
-              ),
+
 
               Container(
                 alignment: Alignment.centerLeft,
@@ -260,7 +318,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Text(title, style: TextStyle(color: following ? Colors.grey : Colors.black,fontWeight: FontWeight.bold),),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: following ?  Colors.orange: Colors.blue,
+            color: following ?  Colors.white: Colors.blue,
             border: Border.all(color: following ? Colors.grey :Colors.black),
             borderRadius: BorderRadius.circular(6.8),
           ),
@@ -306,9 +364,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: ListView(
         children: <Widget>[
+          createProfileDpView(),
           createProfileTopView(),
-
-
+          Divider(),
+          createProfileMiddleView(),
           Divider(),
           createListAndGridPostOrientatin(),
           Divider(height: 0.0,),
