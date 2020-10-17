@@ -1,15 +1,16 @@
 # Flutter Firebase  - The Full Course
 
-🕊️🔥 Build a realtime Quiz App from scratch with Flutter & Firebase. 
+🕊️🔥  A realtime Quiz/Course App from scratch with Flutter & Firebase. 
 
-## Learn it
+## To do's
 
-Enroll in the [Flutter Firebase Course](https://fireship.io/courses/flutter-firebase/) on Fireship. 
+-create where you insert schools
+-display where a student schools in his/her profile
+-display if a user is a student or teacher on a post
 
 ## Try it
 
-- [Get it on The App Store](https://itunes.apple.com/us/app/fireship/id1462592372?mt=8)
-- [Get it on Google Play](https://play.google.com/store/apps/details?id=io.fireship.quizapp)
+
 
 ## Run it
 
