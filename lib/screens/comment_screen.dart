@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/screens/login.dart';
 import 'package:quizapp/widgets/HeaderWidget.dart';
+import 'package:quizapp/widgets/ProgressWidget.dart';
+import 'package:quizapp/widgets/widget.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 
 
@@ -37,7 +39,7 @@ class CommentScreenState extends State<CommentScreen> {
         stream: commentsReference.document(postId).collection("comments").orderBy("timestamp", descending: false).snapshots(),
       builder: (context, dataSnapshot){
           if (!dataSnapshot.hasData) {
-            return CircularProgressIndicator();
+            return circularProgress();
           }
           List<Comment> comments = [];
           dataSnapshot.data.documents.forEach((document){
@@ -84,7 +86,14 @@ class CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          appBar: header(context,strTitle: "Comments"),
+
+      appBar: AppBar(
+        title: AppLogo(),
+        brightness: Brightness.light,
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        //brightness: Brightness.li,
+      ),
       body: Column(
         children: <Widget>[
           Expanded(child: displayComments()),

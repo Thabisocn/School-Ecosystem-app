@@ -9,6 +9,7 @@ import 'package:quizapp/screens/login.dart';
 import 'package:quizapp/screens/search_page.dart';
 import 'package:quizapp/widgets/PostTileWidget.dart';
 import 'package:quizapp/widgets/PostWidget.dart';
+import 'package:quizapp/widgets/ProgressWidget.dart';
 import 'package:quizapp/widgets/widget.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -77,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       future: usersReference.document(widget.userProfileId).get(),
       builder:(context, datasnapshot){
         if (!datasnapshot.hasData) {
-          return CircularProgressIndicator();
+          return circularProgress();
         }
 
         User user = User.fromDocument(datasnapshot.data);
@@ -86,15 +87,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             children: <Widget>[
               Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left:160.0, ) ,
+                alignment: Alignment.center,
+
                 child: Text(
                   user.username,style: TextStyle(fontSize: 19.0,color: Colors.black,),
                 ),
               ),
               Container(
-                alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(right: 65.0 ) ,
+                alignment: Alignment.center,
+
                 child: Text(
                   user.email,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
                 ),
@@ -120,18 +121,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       future: usersReference.document(widget.userProfileId).get(),
       builder:(context, datasnapshot){
         if (!datasnapshot.hasData) {
-          return CircularProgressIndicator();
+          return circularProgress();
         }
 
         User user = User.fromDocument(datasnapshot.data);
         return Padding(
-          padding: EdgeInsets.only(left:130.0),
+          padding: EdgeInsets.only(left:150.0),
           child: Column(
             children: <Widget>[
               Row(
                 children: <Widget>[
 
                   CircleAvatar(
+
                     radius: 60.0,
                     backgroundColor: Colors.grey,
                     backgroundImage: CachedNetworkImageProvider(user.url),
@@ -152,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       future: usersReference.document(widget.userProfileId).get(),
       builder:(context, datasnapshot){
         if (!datasnapshot.hasData) {
-          return CircularProgressIndicator();
+          return circularProgress();
         }
 
         User user = User.fromDocument(datasnapshot.data);
@@ -400,7 +402,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   displayProfilePost(){
     if (loading) {
-      return CircularProgressIndicator();
+      return circularProgress();
 
     }
     else if (postsLIst.isEmpty) {
@@ -409,10 +411,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(padding: EdgeInsets.all(30.0),
-              child: Icon(Icons.photo_library, color: Colors.grey, size: 200.0,),
+              child: Icon(Icons.photo_library, color: Colors.grey, size: 100.0,),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 20.0),
+              padding: EdgeInsets.only(top: 1.0),
               child: Text("No Posts",  style: TextStyle(color: Colors.grey, fontSize: 10.0, fontWeight: FontWeight.bold),),
             )
           ],

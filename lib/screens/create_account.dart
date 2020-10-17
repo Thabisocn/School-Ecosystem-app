@@ -12,7 +12,13 @@ class _CreateAccountState extends State<CreateAccount> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
+
+
+
+
+
    String username;
+   String accountType;
 
 
  submitUsername(){
@@ -20,7 +26,7 @@ class _CreateAccountState extends State<CreateAccount> {
    if (form.validate())
    {
     form.save();
-    
+
     SnackBar snackBar = SnackBar(content: Text("Welcome " + username));
     _scaffoldKey.currentState.showSnackBar(snackBar);
     Timer(Duration(seconds: 4), (){
@@ -28,7 +34,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
 
     });
-    
+
 
    }
  }
@@ -54,34 +60,52 @@ class _CreateAccountState extends State<CreateAccount> {
                 child: Form(
                     key: _formKey,
                     autovalidate: true,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      validator: (val){
-                        if (val.trim().length<5 || val.isEmpty) {
-                          return "Username is very Short";
-                        }
-                        else if (val.trim().length>15) {
-                          return "Username is very Long";
-                        }
-                        else{
-                          return null;
-                        }
-                      },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        TextFormField(
+                          style: TextStyle(color: Colors.black),
+                          validator: (val){
+                            if (val.trim().length<5 || val.isEmpty) {
+                              return "Username is very Short";
+                            }
+                            else if (val.trim().length>15) {
+                              return "Username is very Long";
+                            }
+                            else{
+                              return null;
+                            }
+                          },
 
-                      onSaved: (val) => username = val,
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
+                          onSaved: (val) => username = val,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            border: OutlineInputBorder(),
+                            labelText: "Username",
+                            labelStyle: TextStyle(fontSize: 16.0),
+                            hintText: "Must be atlest 5 characters",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
                         ),
-                        border: OutlineInputBorder(),
-                        labelText: "Username",
-                        labelStyle: TextStyle(fontSize: 16.0),
-                        hintText: "Must be atlest 5 characters",
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
+
+
+
+                      ],
                     ),
+
+
                 ),
+
               ),
+
+
+
+
+
+
+
               GestureDetector(
                 onTap: submitUsername,
                 child: Container(

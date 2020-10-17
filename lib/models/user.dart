@@ -7,6 +7,8 @@ class User {
   final String url;
   final String email;
   final String bio;
+  final String accountType;
+
 
   User({
     this.id,
@@ -15,6 +17,7 @@ class User {
     this.url,
     this.email,
     this.bio,
+    this.accountType
   });
 
   factory User.fromDocument(DocumentSnapshot doc) {
@@ -25,6 +28,7 @@ class User {
       url: doc['url'],
       profileName: doc['profileName'],
       bio: doc['bio'],
+      accountType: doc['accountType'],
     );
   }
 }

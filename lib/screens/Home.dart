@@ -209,6 +209,7 @@ class _HomeState extends State<Home> {
           welcomeView(),
           _searchBar(),
           topicsstudying(),
+
           Container(
               height: 250,
               child: ListView(

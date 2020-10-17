@@ -21,9 +21,9 @@ class _ActivityFeedPageState extends State<ActivityFeedPage> with AutomaticKeepA
       appBar: AppBar(
         title: Text(
           "Activity Feed",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
       ),
       body: buildActivityFeed(),
 

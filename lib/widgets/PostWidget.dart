@@ -155,9 +155,12 @@ class _PostState extends State<Post> {
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15.0,),
 
             ),
+
+
           ),
           subtitle: Text(
-            location, style: TextStyle(color: Colors.black54, fontSize: 12.0,),
+            location, style: TextStyle(color: Colors.black54, fontSize: 12.0, ),
+
           ),
           trailing: isPostOwner ? IconButton(
             icon: Icon(Icons.more_vert, color: Colors.black,),
@@ -292,10 +295,31 @@ class _PostState extends State<Post> {
     return GestureDetector(
       onDoubleTap: ()=> controlUserLikePost ,
       child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-            Image.network(url),
 
+        alignment: Alignment.center,
+
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            height: 250,
+            child: Stack(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: Image.network(
+                    url,
+
+                    width: MediaQuery.of(context).size.width ,
+                    fit: BoxFit.cover,) ,
+                ),
+
+                Container(
+                  decoration: BoxDecoration(color: Colors.black26.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(6)),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -308,7 +332,7 @@ class _PostState extends State<Post> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 20.0, left: 150.0)),
+            Padding(padding: EdgeInsets.only(top: 20.0, left: 10.0)),
             GestureDetector(
               onTap: ()=> controlUserLikePost(),
               child: Icon(
@@ -348,7 +372,7 @@ class _PostState extends State<Post> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(left: 20.0),
+              margin: EdgeInsets.only(left: 16.0),
               child: Text(
                 "$username: ",style: TextStyle(color: Colors.black, fontSize: 16.0,),
               ),

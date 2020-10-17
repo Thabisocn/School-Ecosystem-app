@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quizapp/screens/Home.dart';
 import 'package:quizapp/screens/upload_page.dart';
 import 'services/services.dart';
 import 'screens/screens.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
+
       providers: [
         StreamProvider<Report>.value(value: Global.reportRef.documentStream),
         StreamProvider<FirebaseUser>.value(value: AuthService().user),
@@ -28,12 +30,14 @@ class MyApp extends StatelessWidget {
 
         // Firebase Analytics
         navigatorObservers: [
+
           FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
         ],
 
         // Named Routes
         routes: {
           '/': (context) => LoginScreen(),
+          '/home': (context) => Home(),
           '/topics': (context) => TopicsScreen(),
           '/profile': (context) => ProfileScreen(),
           '/about': (context) => Uploader(),

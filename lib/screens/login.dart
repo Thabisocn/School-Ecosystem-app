@@ -148,6 +148,7 @@ class LoginScreenState extends State<LoginScreen> {
         "url": gCurrentUser.photoUrl,
         "email": gCurrentUser.email,
         "bio": "",
+        "accountType": "",
         "timestamp": timestamp,
       });
       
@@ -229,7 +230,7 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Scaffold buildSignInScreen() {
     return Scaffold(
-      backgroundColor: Color(0xff615dfa),
+
       body: Container(
         padding: EdgeInsets.all(30),
         decoration: BoxDecoration(),
@@ -243,12 +244,12 @@ class LoginScreenState extends State<LoginScreen> {
               height:100,
             ),
             Text(
-              'Welcome to Mokowe',
-              style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+              'Welcome to Education',
+              style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
 
-            Text('Your Tagline', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold), ),
+            Text('Your Tagline', style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold), ),
             GestureDetector(
               onTap: ()=> loginUser(),
                 child: Container(
