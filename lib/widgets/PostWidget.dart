@@ -24,6 +24,7 @@ class Post extends StatefulWidget
   final String description;
   final String location;
   final String url;
+  final String school;
 
 
 
@@ -36,6 +37,7 @@ class Post extends StatefulWidget
     this.description,
     this.location,
     this.url,
+    this.school,
 
 });
 
@@ -48,6 +50,7 @@ class Post extends StatefulWidget
       description: documentSnapshot["description"],
       location: documentSnapshot["location"],
       url: documentSnapshot["url"],
+      school: documentSnapshot["school"],
 
 
 
@@ -79,6 +82,7 @@ class Post extends StatefulWidget
       description: this.description,
       location: this.location,
       url: this.url,
+      school: this.school,
       likeCount: getTotalNumberOfLikes(this.likes),
   );
 }
@@ -95,6 +99,7 @@ class _PostState extends State<Post> {
   final String description;
   final String location;
   final String url;
+  final String school;
 
   int likeCount;
   bool isLiked;
@@ -111,6 +116,7 @@ class _PostState extends State<Post> {
     this.description,
     this.location,
     this.url,
+    this.school,
     this.likeCount
 
 
@@ -158,13 +164,24 @@ class _PostState extends State<Post> {
 
                 Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 2.0),
+
                   child: Text(
                     user.username, style: TextStyle(fontSize: 15.0,
                     color: Colors.black,
                   ),
                   ),
                 ),
+
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(left: 5.0),
+                  child: Text(
+                      user.school, style: TextStyle(fontSize: 11.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                  ),
+                ),
+
               ],
 
             ),
@@ -173,6 +190,7 @@ class _PostState extends State<Post> {
           ),
           subtitle: Text(
             location, style: TextStyle(color: Colors.black54, fontSize: 12.0, ),
+
           ),
           trailing: isPostOwner ? IconButton(
             icon: Icon(Icons.more_vert, color: Colors.black,),
