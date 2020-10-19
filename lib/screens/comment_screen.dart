@@ -91,6 +91,7 @@ class CommentScreenState extends State<CommentScreen> {
         title: AppLogo(),
         brightness: Brightness.light,
         elevation: 0.0,
+        iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.transparent,
         //brightness: Brightness.li,
       ),

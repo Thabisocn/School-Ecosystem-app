@@ -100,14 +100,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   user.email,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
                 ),
               ),
-
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 3.0) ,
-                child: Text(
-                  user.bio,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
-                ),
-              ),
             ],
           ),
         );
@@ -189,15 +181,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   )
                 ],
               ),
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 3.0) ,
+                child: Text(
+                  user.bio,style: TextStyle(fontSize: 18.0,color: Colors.black,),
+                ),
+              ),
 
-
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 3.0) ,
+                child: Text(
+                  user.accountType,style: TextStyle(fontSize: 24.0,color: Colors.black,fontWeight: FontWeight.bold),
+                ),
+              ),
 
 
               Container(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
                 padding: EdgeInsets.only(top: 3.0) ,
                 child: Text(
-                  user.bio,style: TextStyle(fontSize: 18.0,color: Colors.black,fontWeight: FontWeight.bold),
+                  user.school,style: TextStyle(fontSize: 24.0,color: Colors.black,fontWeight: FontWeight.bold),
                 ),
               ),
             ],

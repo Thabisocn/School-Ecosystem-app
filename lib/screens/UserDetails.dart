@@ -8,30 +8,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 
-class EditProfilePage extends StatefulWidget {
+class UserDetails extends StatefulWidget {
 
   final String currentOnlineUserId;
 
-  EditProfilePage({this.currentOnlineUserId});
+  UserDetails({this.currentOnlineUserId});
 
   @override
-  _EditProfilePageState createState() => _EditProfilePageState();
+  _UserDetailsState createState() => _UserDetailsState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _UserDetailsState extends State<UserDetails> {
 
-  TextEditingController ProfileNameTextEditingController  = TextEditingController();
-  TextEditingController AccountTypeTextEditingController  = TextEditingController();
-  TextEditingController SchoolTextEditingController  = TextEditingController();
-  TextEditingController bioTextEditingController  = TextEditingController();
+
+  TextEditingController accountTypeTextEditingController  = TextEditingController();
 
   final _scaffoldGlobalKey = GlobalKey<ScaffoldState>();
   bool loading = false;
   User user;
   bool _bioValid = true;
-  bool _AccountTypeValid = true;
-  bool _schoolValid = true;
-  bool _profileNameValid = true;
+
 
   void initState(){
     super.initState();
@@ -48,10 +44,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     DocumentSnapshot documentSnapshot = await usersReference.document(widget.currentOnlineUserId).get();
     user = User.fromDocument(documentSnapshot);
 
-    ProfileNameTextEditingController.text = user.username;
-    AccountTypeTextEditingController.text = user.accountType;
-    SchoolTextEditingController.text = user.school;
-    bioTextEditingController.text = user.bio;
+
+    accountTypeTextEditingController.text = user.bio;
 
     setState(() {
       loading = false;
@@ -63,30 +57,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
         .collection('users')
         .document(currentUser.id)
         .updateData({
-      "displayName": ProfileNameTextEditingController.text,
-      "accountType": AccountTypeTextEditingController.text,
-      "school": SchoolTextEditingController.text,
-      "bio": bioTextEditingController.text,
+
+      "bio": accountTypeTextEditingController.text,
     });
   }
 
   updateUserData(){
     setState(() {
-      ProfileNameTextEditingController.text.trim().length < 3 || ProfileNameTextEditingController.text.isEmpty ? _profileNameValid = false : _profileNameValid = true;
-      AccountTypeTextEditingController.text.trim().length > 110 ? _AccountTypeValid = false : _AccountTypeValid = true;
-      SchoolTextEditingController.text.trim().length > 110 ? _schoolValid = false : _schoolValid = true;
-      bioTextEditingController.text.trim().length > 110 ? _bioValid = false : _bioValid = true;
+
+      accountTypeTextEditingController.text.trim().length > 110 ? _bioValid = false : _bioValid = true;
     });
 
-    if (_bioValid && _profileNameValid) {
+    if (_bioValid ) {
       usersReference.document(widget.currentOnlineUserId).updateData({
-        "profileName" : ProfileNameTextEditingController.text,
-        "accountType": AccountTypeTextEditingController.text,
-        "school": SchoolTextEditingController.text,
-        "bio": bioTextEditingController.text,
+
+        "bio": accountTypeTextEditingController.text,
       });
 
-      SnackBar successSnackBar = SnackBar(content: Text("Profile has been updated successfully"));
+      SnackBar successSnackBar = SnackBar(content: Text("Profile has been updated succesfully"));
       _scaffoldGlobalKey.currentState.showSnackBar(successSnackBar);
     }
   }
@@ -97,7 +85,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       key: _scaffoldGlobalKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Edit Profile", style: TextStyle(
           color: Colors.black,
         ),),
@@ -121,8 +109,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: Column(
                     children: <Widget>[
                       createProfileNameTextFormField(),
-                      createAccountTypeTextFormField(),
-                      createSchoolTextFormField(),
                       createBioTextFormField()
                     ],
                   ) ,
@@ -175,7 +161,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         TextField(
           style: TextStyle(
               color: Colors.black),
-          controller: ProfileNameTextEditingController,
+
           decoration: InputDecoration(
               hintText: "Write profile name here...",
               enabledBorder: UnderlineInputBorder(
@@ -188,81 +174,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     color: Colors.grey),
               ),
               hintStyle: TextStyle(color: Colors.grey),
-              errorText: _profileNameValid ? null : "Profile name is very short"
+
           ),
         ),
 
       ],
     );
   }
-
-  Column createAccountTypeTextFormField(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(padding:EdgeInsets.only(top: 13.0),
-          child: Text(
-            "Account Type", style: TextStyle(color: Colors.grey) ,
-          ),
-        ),
-        TextField(
-          style: TextStyle(
-              color: Colors.black),
-          controller: AccountTypeTextEditingController,
-          decoration: InputDecoration(
-              hintText: "Write Account Type here...",
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey,)
-
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.grey),
-              ),
-              hintStyle: TextStyle(color: Colors.grey),
-              errorText: _AccountTypeValid? null : "Account Type description is very short"
-          ),
-        ),
-
-      ],
-    );
-  }
-
-  Column createSchoolTextFormField(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(padding:EdgeInsets.only(top: 13.0),
-          child: Text(
-            "Current School", style: TextStyle(color: Colors.grey) ,
-          ),
-        ),
-        TextField(
-          style: TextStyle(
-              color: Colors.black),
-          controller: SchoolTextEditingController,
-          decoration: InputDecoration(
-              hintText: "Write current school here...",
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey,)
-
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.grey),
-              ),
-              hintStyle: TextStyle(color: Colors.grey),
-              errorText: _schoolValid? null : "School description is short is very short"
-          ),
-        ),
-
-      ],
-    );
-  }
-
-
 
   Column createBioTextFormField(){
     return Column(
@@ -276,7 +194,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         TextField(
           style: TextStyle(
               color: Colors.black),
-          controller: bioTextEditingController,
+          controller: accountTypeTextEditingController,
           decoration: InputDecoration(
               hintText: "Write Bio here...",
               enabledBorder: UnderlineInputBorder(

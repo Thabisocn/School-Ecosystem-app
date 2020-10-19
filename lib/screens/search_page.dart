@@ -29,6 +29,7 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
   AppBar searchPageHeader(){
     return AppBar(
       backgroundColor: Colors.white,
+      iconTheme: IconThemeData(color: Colors.black),
       title: TextFormField(
         style: TextStyle(fontSize: 18.0,color: Colors.black54),
         controller: searchTextEditingController,

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,7 +9,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quizapp/screens/Home.dart';
 import 'package:quizapp/screens/TimeLinePage.dart';
-
 import 'package:quizapp/screens/create_account.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/profile.dart';
@@ -149,6 +147,7 @@ class LoginScreenState extends State<LoginScreen> {
         "email": gCurrentUser.email,
         "bio": "",
         "accountType": "",
+        "school": "",
         "timestamp": timestamp,
       });
       

@@ -1,6 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:quizapp/screens/Home.dart';
+import 'package:quizapp/screens/UserDetails.dart';
 import 'package:quizapp/widgets/HeaderWidget.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -11,6 +12,7 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+
 
 
 
@@ -31,6 +33,7 @@ class _CreateAccountState extends State<CreateAccount> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
     Timer(Duration(seconds: 4), (){
       Navigator.pop(context, username);
+
 
 
     });

@@ -8,6 +8,7 @@ class User {
   final String email;
   final String bio;
   final String accountType;
+  final String school;
 
 
   User({
@@ -17,7 +18,8 @@ class User {
     this.url,
     this.email,
     this.bio,
-    this.accountType
+    this.accountType,
+    this.school
   });
 
   factory User.fromDocument(DocumentSnapshot doc) {
@@ -29,6 +31,7 @@ class User {
       profileName: doc['profileName'],
       bio: doc['bio'],
       accountType: doc['accountType'],
+      school: doc['school'],
     );
   }
 }

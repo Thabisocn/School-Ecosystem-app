@@ -24,6 +24,7 @@ class _ActivityFeedPageState extends State<ActivityFeedPage> with AutomaticKeepA
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: buildActivityFeed(),
 
