@@ -149,10 +149,23 @@ class _PostState extends State<Post> {
           leading: CircleAvatar(backgroundImage: CachedNetworkImageProvider(user.url),radius: 25, backgroundColor: Colors.grey,),
           title: GestureDetector(
             onTap: ()=>openProfile(context, userProfileId: user.id),
-            child: Text(
-              user.username,
-              style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15.0,),
+
+
+
+            child: Row(
+
+              children: <Widget>[
+
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: 2.0),
+                  child: Text(
+                    user.username, style: TextStyle(fontSize: 15.0,
+                    color: Colors.black,
+                  ),
+                  ),
+                ),
+              ],
 
             ),
 
@@ -160,7 +173,6 @@ class _PostState extends State<Post> {
           ),
           subtitle: Text(
             location, style: TextStyle(color: Colors.black54, fontSize: 12.0, ),
-
           ),
           trailing: isPostOwner ? IconButton(
             icon: Icon(Icons.more_vert, color: Colors.black,),
