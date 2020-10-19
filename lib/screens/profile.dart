@@ -193,17 +193,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: 3.0) ,
                 child: Text(
-                  user.accountType,style: TextStyle(fontSize: 24.0,color: Colors.black,fontWeight: FontWeight.bold),
+                  user.accountType,style: TextStyle(fontSize: 20.0,color: Colors.black,fontWeight: FontWeight.bold),
                 ),
               ),
+              Row(
 
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(left: 140.0),
+                    child: Text(
+                      "@", style: TextStyle(fontSize: 23.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(top: 2.0),
+                    child: Text(
+                      user.school, style: TextStyle(fontSize: 23.0,
+                        color: Colors.black,
+                        ),
+                    ),
+                  ),
+                ],
 
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(top: 3.0) ,
-                child: Text(
-                  user.school,style: TextStyle(fontSize: 24.0,color: Colors.black,fontWeight: FontWeight.bold),
-                ),
               ),
             ],
           ),
