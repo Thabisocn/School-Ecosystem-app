@@ -22,6 +22,7 @@ class Post extends StatefulWidget
   final dynamic likes;
   final String username;
   final String description;
+  final String subject;
   final String location;
   final String url;
   final String school;
@@ -35,6 +36,7 @@ class Post extends StatefulWidget
     this.likes,
     this.username,
     this.description,
+    this.subject,
     this.location,
     this.url,
     this.school,
@@ -48,6 +50,7 @@ class Post extends StatefulWidget
       likes: documentSnapshot["likes"],
       username: documentSnapshot["username"],
       description: documentSnapshot["description"],
+      subject: documentSnapshot["subject"],
       location: documentSnapshot["location"],
       url: documentSnapshot["url"],
       school: documentSnapshot["school"],
@@ -80,6 +83,7 @@ class Post extends StatefulWidget
       likes: this.likes,
       username: this.username,
       description: this.description,
+      subject: this.subject,
       location: this.location,
       url: this.url,
       school: this.school,
@@ -97,6 +101,7 @@ class _PostState extends State<Post> {
   Map likes;
   final String username;
   final String description;
+  final String subject;
   final String location;
   final String url;
   final String school;
@@ -114,6 +119,7 @@ class _PostState extends State<Post> {
     this.likes,
     this.username,
     this.description,
+    this.subject,
     this.location,
     this.url,
     this.school,
@@ -164,7 +170,7 @@ class _PostState extends State<Post> {
 
                 Container(
                   alignment: Alignment.center,
-
+                  padding: EdgeInsets.only(left: 1.0),
                   child: Text(
                     user.username, style: TextStyle(fontSize: 15.0,
                     color: Colors.black,
@@ -174,10 +180,30 @@ class _PostState extends State<Post> {
 
                 Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 5.0),
                   child: Text(
-                      user.school, style: TextStyle(fontSize: 11.0,
-                      color: Colors.black,
+                    "(", style: TextStyle(fontSize: 9.0,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(left: 3.0),
+                  child: Text(
+                      user.school, style: TextStyle(fontSize: 9.0,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(left: 1.0),
+                  child: Text(
+                    ")", style: TextStyle(fontSize: 9.0,
+                      color: Colors.black54,
                       fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -192,6 +218,9 @@ class _PostState extends State<Post> {
             location, style: TextStyle(color: Colors.black54, fontSize: 12.0, ),
 
           ),
+
+
+
           trailing: isPostOwner ? IconButton(
             icon: Icon(Icons.more_vert, color: Colors.black,),
             onPressed: ()=>controlPostDelete(context),
@@ -329,6 +358,8 @@ class _PostState extends State<Post> {
         alignment: Alignment.center,
 
         children: <Widget>[
+
+
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
             height: 250,
@@ -396,6 +427,13 @@ class _PostState extends State<Post> {
               ),
             )
           ],
+        ),
+        Container(
+        alignment: Alignment.center,
+          child: Text(
+            subject ,style: TextStyle(color: Colors.black54, fontSize: 14.0, fontWeight: FontWeight.bold),
+          ),
+
         ),
 
         Row(

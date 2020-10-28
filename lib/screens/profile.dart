@@ -210,9 +210,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.only(top: 2.0),
+
                     child: Text(
-                      user.school, style: TextStyle(fontSize: 23.0,
+                      user.school, style: TextStyle(fontSize: 20.0,
                         color: Colors.black,
                         ),
                     ),

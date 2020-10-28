@@ -259,11 +259,13 @@ class _Uploader extends State<Uploader> {
 class PostForm extends StatelessWidget {
   final imageFile;
   final TextEditingController descriptionController;
+  final TextEditingController subjectController;
   final TextEditingController locationController;
   final bool loading;
   PostForm(
       {this.imageFile,
         this.descriptionController,
+        this.subjectController,
         this.loading,
         this.locationController});
 
@@ -274,45 +276,74 @@ class PostForm extends StatelessWidget {
             ? LinearProgressIndicator()
             : Padding(padding: EdgeInsets.only(top: 0.0)),
         Divider(),
+
+        Container(
+          width: 390.0,
+          child: TextField(
+            controller: subjectController,
+            decoration: InputDecoration(
+              labelText: "Subject",
+              hintText: "Subject",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(35),
+              ),),
+            maxLines: 1,
+          ),
+        ),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
 
             Container(
-              width: 250.0,
+              padding: EdgeInsets.only(top: 7),
+              width: 390.0,
               child: TextField(
                 controller: descriptionController,
                 decoration: InputDecoration(
-                    hintText: "Write a caption...", border: InputBorder.none),
+                    labelText: "Write your question...",
+                    hintText: "Write your question...",
+                    border: OutlineInputBorder(),),
+                maxLines: 5,
               ),
             ),
-            Container(
-              height: 45.0,
-              width: 45.0,
-              child: AspectRatio(
-                aspectRatio: 487 / 451,
-                child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        alignment: FractionalOffset.topCenter,
-                        image: FileImage(imageFile),
-                      )),
-                ),
-              ),
-            ),
+
           ],
         ),
+        Container(
+          padding: EdgeInsets.only(top: 7),
+          height: 300.0,
+          width: 300,
+
+          child: AspectRatio(
+            aspectRatio: 16/9,
+            child: Container(
+
+              decoration: BoxDecoration(
+
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    alignment: FractionalOffset.topCenter,
+                    image: FileImage(imageFile),
+                  )),
+
+            ),
+          ),
+        ),
+
         Divider(),
         ListTile(
-          leading: Icon(Icons.pin_drop),
+
           title: Container(
             width: 250.0,
             child: TextField(
               controller: locationController,
               decoration: InputDecoration(
                   hintText: "Where was this photo taken?",
-                  border: InputBorder.none),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(35),
+                  ),
+              icon:  Icon(Icons.pin_drop),),
             ),
           ),
         )

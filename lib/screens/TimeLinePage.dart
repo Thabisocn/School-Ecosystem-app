@@ -38,6 +38,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
   String postId = Uuid().v4();
   Map<String, double> currentLocation = Map();
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController subjectController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
   bool uploading = false;
@@ -121,10 +122,11 @@ class _TimeLinePageState extends State<TimeLinePage> {
 
     String downloadUrl = await uploadPhoto(file);
 
-    savePostToFireStore(url: downloadUrl, location: locationController.text, description: descriptionController.text);
+    savePostToFireStore(url: downloadUrl, location: locationController.text, description: descriptionController.text, subject: subjectController.text);
 
     locationController.clear();
     descriptionController.clear();
+    subjectController.clear();
 
     setState(() {
       file = null;
@@ -134,7 +136,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
 
   }
 
-  savePostToFireStore({String url, String location, String description}){
+  savePostToFireStore({String url, String location, String description, String subject}){
 
     postsReference.document(widget.gCurrentUser.id).collection("usersPosts").document(postId).setData({
       "postId": postId,
@@ -143,6 +145,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
       "likes": {},
       "username": widget.gCurrentUser.username,
       "description": description,
+      "subject": subject,
       "location": location,
       "url": url,
     });
@@ -188,6 +191,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
             PostForm(
               imageFile: file,
               descriptionController: descriptionController,
+              subjectController: subjectController,
               locationController: locationController,
               loading: uploading,
             ),
@@ -216,6 +220,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
   void clearImage() {
     locationController.clear();
     descriptionController.clear();
+    subjectController.clear();
 
     setState(() {
       file = null;
