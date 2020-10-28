@@ -194,7 +194,7 @@ class LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           Home(userProfileId: gSignIn.currentUser.id),
           TimeLinePage(gCurrentUser: currentUser,),
-          Uploader(gCurrentUser: currentUser,),
+         // Uploader(gCurrentUser: currentUser,),
           TopicsScreen(),
           ProfileScreen(userProfileId: gSignIn.currentUser.id),
         ],
@@ -214,7 +214,7 @@ class LoginScreenState extends State<LoginScreen> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home, size: 20), title: Text('Home')),
           BottomNavigationBarItem(icon: Icon(Icons.clear_all, size: 20), title: Text('Feed')),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 20), title: Text('Upload')),
+         // BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 20), title: Text('Upload')),
           BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.graduationCap, size: 20), title: Text('Courses')),
           BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.userCircle, size: 20),title: Text('Profile')),
         ],

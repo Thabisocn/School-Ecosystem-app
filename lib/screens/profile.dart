@@ -203,7 +203,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(left: 140.0),
                     child: Text(
-                      "@", style: TextStyle(fontSize: 23.0,
+                      "", style: TextStyle(fontSize: 23.0,
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
                     ),
