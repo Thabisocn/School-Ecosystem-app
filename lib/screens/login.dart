@@ -238,15 +238,11 @@ class LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             new Image(
-              image: new AssetImage("assets/images/MokoweLogo_SplashScreen-01.png"),
+              image: new AssetImage("assets/images/tamiat-logo-icon-color.png"),
               width:  100,
               height:100,
             ),
-            Text(
-              'Welcome to Education',
-              style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
+
 
             Text('Your Tagline', style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold), ),
             GestureDetector(
@@ -258,7 +254,7 @@ class LoginScreenState extends State<LoginScreen> {
                     image: DecorationImage(
                       image: AssetImage("assets/images/sign_in.png"),
                       fit: BoxFit.cover,
-                      
+
                     ),
                   ),
                 ),
@@ -269,7 +265,7 @@ class LoginScreenState extends State<LoginScreen> {
               builder: (context, snapshot) {
                 if (snapshot.data == true) {
                   return AppleSignInButton(
-                    onPressed: () async { 
+                    onPressed: () async {
                       FirebaseUser user = await auth.appleSignIn();
                       if (user != null) {
                         Navigator.pushReplacementNamed(context, '/topics');
@@ -308,7 +304,6 @@ class LoginButton extends StatelessWidget {
   final IconData icon;
   final String text;
   final Function loginMethod;
-
   const LoginButton(
       {Key key, this.text, this.icon, this.color, this.loginMethod})
       : super(key: key);

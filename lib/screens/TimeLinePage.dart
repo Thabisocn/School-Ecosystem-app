@@ -299,7 +299,8 @@ class _TimeLinePageState extends State<TimeLinePage> {
           title: const Text('Create a Post'),
           children: <Widget>[
             SimpleDialogOption(
-                child: const Text('Take a photo'),
+                child: const Text('Take a photo', style: TextStyle(fontSize: 14.0,
+                ),),
                 onPressed: () async {
                   Navigator.pop(context);
                   File imageFile =
@@ -309,7 +310,8 @@ class _TimeLinePageState extends State<TimeLinePage> {
                   });
                 }),
             SimpleDialogOption(
-                child: const Text('Choose from Gallery'),
+                child: const Text('Choose from Gallery', style: TextStyle(fontSize: 14.0,
+                    ),),
                 onPressed: () async {
                   Navigator.of(context).pop();
                   File imageFile =
@@ -319,7 +321,8 @@ class _TimeLinePageState extends State<TimeLinePage> {
                   });
                 }),
             SimpleDialogOption(
-              child: const Text("Cancel"),
+              child: const Text("Cancel", style: TextStyle(fontSize: 14.0,
+              ),),
               onPressed: () {
                 Navigator.pop(context);
               },

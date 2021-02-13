@@ -1,7 +1,7 @@
 name: quizapp
 description: Realtime Quiz app built with Flutter & Firebase
 
-version: 1.4.0
+version: 1.22.0
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

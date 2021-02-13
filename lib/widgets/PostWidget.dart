@@ -431,25 +431,20 @@ class _PostState extends State<Post> {
         Container(
         alignment: Alignment.center,
           child: Text(
-            subject ,style: TextStyle(color: Colors.black54, fontSize: 14.0, fontWeight: FontWeight.bold),
+            subject ,style: TextStyle(color: Colors.black54, fontSize: 13.0, fontWeight: FontWeight.bold),
           ),
 
         ),
 
         Row(
+
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 16.0),
-              child: Text(
-                "$username: ",style: TextStyle(color: Colors.black, fontSize: 16.0,),
-              ),
-
-            ),
-
+            Padding(padding: EdgeInsets.only(right: 10.0, left: 10.0)),
             Expanded(
+
               child: Text(
-                description, style: TextStyle(color: Colors.grey,fontSize: 16.0,),
+                description, style: TextStyle(color: Colors.black54,fontSize: 12.5,),
               ),
             )
             
