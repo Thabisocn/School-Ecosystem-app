@@ -1,14 +1,18 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:quizapp/constants.dart';
 import 'package:quizapp/models/user.dart';
 import 'package:quizapp/screens/login.dart';
 import 'package:quizapp/shared/loader.dart';
 import 'package:quizapp/widgets/widget.dart';
+
 
 class Home extends StatefulWidget {
 
@@ -21,9 +25,54 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  // Current selected
+  int current = 0;
 
+  // style
+  var cardTextStyle = TextStyle(
+      fontFamily: "Montserrat Regular",
+      fontSize: 14,
+      color: Color.fromRGBO(63, 63, 63, 1));
+  // Handle Indicator
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+  
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseUser user;
+  bool isloggedin= false;
   PageController pageController = PageController(viewportFraction: 0.5);
   int currentPage = 0;
+
+  checkAuthentification() async{
+
+    _auth.onAuthStateChanged.listen((user) {
+
+      if(user ==null)
+      {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
+      }
+    });
+  }
+
+  getUser() async{
+
+    FirebaseUser firebaseUser = await _auth.currentUser();
+    await firebaseUser?.reload();
+    firebaseUser = await _auth.currentUser();
+
+    if(firebaseUser !=null)
+    {
+      setState(() {
+        this.user =firebaseUser;
+        this.isloggedin=true;
+      });
+    }
+  }
 
 
   createProfileTopView() {
@@ -155,32 +204,17 @@ class _HomeState extends State<Home> {
   }
 
   topicsstudying() {
-    return FutureBuilder(
-      future: usersReference.document(widget.userProfileId).get(),
-      builder: (context, datasnapshot) {
-        return Padding(
-          padding: EdgeInsets.only(top: 2.0, left: 10.0),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(top: 50.0, left: 70.0),
-                    child: Text(
-                      "Topics Currently Studying", style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black26,
-                        fontWeight: FontWeight.normal),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        "Choose something menu?", style: TextStyle(
+          fontSize: 18.0,
+          color: Colors.grey,
+          fontWeight: FontWeight.normal),
+      ),
     );
+
+
   }
 
 
@@ -211,376 +245,89 @@ class _HomeState extends State<Home> {
           topicsstudying(),
 
           Container(
-              height: 250,
-              child: ListView(
-
-
+              height: 400,
+              child: GridView.count(
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                primary: false,
+                crossAxisCount: 2,
                 children: <Widget>[
-
-
-                  SizedBox(height: 15.0),
-
-
-                  CarouselSlider(
-
-
-                    height: 240.0,
-
-
-                    enlargeCenterPage: true,
-
-
-                    autoPlay: true,
-
-
-                    aspectRatio: 16 / 9,
-
-
-                    autoPlayCurve: Curves.fastOutSlowIn,
-
-
-                    enableInfiniteScroll: true,
-
-
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-
-
-                    viewportFraction: 0.8,
-
-
-                    items: [
-
-
-                      Container(
-
-
-                        margin: EdgeInsets.all(5.0),
-
-
-                        decoration: BoxDecoration(
-
-
-                          borderRadius: BorderRadius.circular(10.0),
-
-
-                          image: DecorationImage(
-
-
-                            image: AssetImage('assets/yoga_1.jpg'),
-
-
-                            fit: BoxFit.cover,
-
-
-                          ),
-
-
-                        ),
-
-
-                        child: Column(
-
-
-                          mainAxisAlignment: MainAxisAlignment.center,
-
-
-                          crossAxisAlignment: CrossAxisAlignment.center,
-
-
-                          children: <Widget>[
-
-
-                            Text(
-
-
-                              'DUMMY data  for hahaha',
-
-
-                              style: TextStyle(
-
-
-                                color: Colors.white,
-
-
-                                fontWeight: FontWeight.bold,
-
-
-                                fontSize: 18.0,
-
-
-                              ),
-
-
-                            ),
-
-
-
-                            Padding(
-
-
-                              padding: const EdgeInsets.all(15.0),
-
-
-                              child: Text(
-
-
-                                'Lorem Ipsum is simply dummy text use for printing and type script',
-
-
-                                style: TextStyle(
-
-
-                                  color: Colors.white,
-
-
-                                  fontSize: 15.0,
-
-
-                                ),
-
-
-                                textAlign: TextAlign.center,
-
-
-                              ),
-
-
-                            ),
-
-
-                          ],
-
-
-                        ),
-
-
-                      ),
-
-
-
-                      Container(
-
-
-                        margin: EdgeInsets.all(5.0),
-
-
-                        decoration: BoxDecoration(
-
-
-                          borderRadius: BorderRadius.circular(10.0),
-
-
-                          image: DecorationImage(
-
-
-                            image: AssetImage('assets/yoga_2.jpg'),
-
-
-                            fit: BoxFit.cover,
-
-
-                          ),
-
-
-                        ),
-
-
-                        child: Column(
-
-
-                          mainAxisAlignment: MainAxisAlignment.center,
-
-
-                          crossAxisAlignment: CrossAxisAlignment.center,
-
-
-                          children: <Widget>[
-
-
-                            Text(
-
-
-                              'DUMMY data  for hahaha',
-
-
-                              style: TextStyle(
-
-
-                                color: Colors.white,
-
-
-                                fontWeight: FontWeight.bold,
-
-
-                                fontSize: 18.0,
-
-
-                              ),
-
-
-                            ),
-
-
-
-                            Padding(
-
-
-                              padding: const EdgeInsets.all(15.0),
-
-
-                              child: Text(
-
-
-                                'Lorem Ipsum is simply dummy text use for printing and type script',
-
-
-                                style: TextStyle(
-
-
-                                  color: Colors.white,
-
-
-                                  fontSize: 15.0,
-
-
-                                ),
-
-
-                                textAlign: TextAlign.center,
-
-
-                              ),
-
-
-                            ),
-
-
-                          ],
-
-
-                        ),
-
-
-                      ),
-
-
-
-                      Container(
-
-
-                        margin: EdgeInsets.all(5.0),
-
-
-                        decoration: BoxDecoration(
-
-
-                          borderRadius: BorderRadius.circular(10.0),
-
-
-                          image: DecorationImage(
-
-
-                            image: AssetImage('assets/yoga_3.jpg'),
-
-
-                            fit: BoxFit.cover,
-
-
-                          ),
-
-
-                        ),
-
-
-                        child: Column(
-
-
-                          mainAxisAlignment: MainAxisAlignment.center,
-
-
-                          crossAxisAlignment: CrossAxisAlignment.center,
-
-
-                          children: <Widget>[
-
-
-                            Text(
-
-
-                              'DUMMY data  for hahaha',
-
-
-                              style: TextStyle(
-
-
-                                color: Colors.white,
-
-
-                                fontWeight: FontWeight.bold,
-
-
-                                fontSize: 18.0,
-
-
-                              ),
-
-
-                            ),
-
-
-
-                            Padding(
-
-
-                              padding: const EdgeInsets.all(15.0),
-
-
-                              child: Text(
-
-
-                                'Lorem Ipsum is simply dummy text use for printing and type script',
-
-
-                                style: TextStyle(
-
-
-                                  color: Colors.white,
-
-
-                                  fontSize: 15.0,
-
-
-                                ),
-
-
-                                textAlign: TextAlign.center,
-
-
-                              ),
-
-
-                            ),
-
-
-                          ],
-
-
-                        ),
-
-
-                      ),
-
-
-                    ],
-
-
+                  Card(
+                    shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    elevation: 4,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SvgPicture.network('https://image.flaticon.com/icons/svg/1904/1904425.svg', height: 128,),
+                        Text(
+                          'Personal Data',
+                          style: cardTextStyle,
+
+                        )
+                      ],
+                    ),
                   ),
 
+                  Card(
+
+                    shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    elevation: 4,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SvgPicture.network('https://image.flaticon.com/icons/svg/1904/1904565.svg', height: 128,),
+                        Text(
+                          'Study Table',
+                          style: cardTextStyle,
+
+                        )
+                      ],
+                    ),
+                  ),
+
+                  Card(
+                    shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    elevation: 4,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SvgPicture.network('https://image.flaticon.com/icons/svg/1904/1904565.svg', height: 128,),
+                        Text(
+                          'Study Material',
+                          style: cardTextStyle,
+
+                        )
+                      ],
+                    ),
+                  ),
+
+                  Card(
+                    shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    elevation: 4,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SvgPicture.network('https://image.flaticon.com/icons/svg/1904/1904527.svg', height: 128,),
+                        Text(
+                          'Attendance Recap',
+                          style: cardTextStyle,
+
+                        )
+                      ],
+                    ),
+                  ),
 
                 ],
               )
-
-          ),
+          )
 
 
 

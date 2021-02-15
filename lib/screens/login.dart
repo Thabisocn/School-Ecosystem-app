@@ -7,7 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:quizapp/screens/FirebaseLogin.dart';
 import 'package:quizapp/screens/Home.dart';
+import 'package:quizapp/screens/SignUp.dart';
 import 'package:quizapp/screens/TimeLinePage.dart';
 import 'package:quizapp/screens/create_account.dart';
 import 'package:quizapp/models/user.dart';
@@ -67,6 +69,16 @@ class LoginScreenState extends State<LoginScreen> {
 
 
 
+  }
+
+  navigateToLogin()async{
+
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> FirebaseLogin()));
+  }
+
+  navigateToRegister()async{
+
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> SignUp()));
   }
 
   controlSignIn(GoogleSignInAccount signInAccount) async{
@@ -229,58 +241,104 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Scaffold buildSignInScreen() {
     return Scaffold(
-
       body: Container(
-        padding: EdgeInsets.all(30),
-        decoration: BoxDecoration(),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            new Image(
-              image: new AssetImage("assets/images/tamiat-logo-icon-color.png"),
-              width:  100,
-              height:100,
+          children: <Widget>[
+
+            SizedBox(height: 35.0),
+
+            Container(
+              height: 400,
+              child: Image(image: AssetImage("images/tamiat-logo-icon-color.png"),
+                fit: BoxFit.contain,),
             ),
 
+            SizedBox(height : 20),
 
-            Text('Your Tagline', style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold), ),
-            GestureDetector(
-              onTap: ()=> loginUser(),
-                child: Container(
-                  width: 220.0,
-                  height: 45.0,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/sign_in.png"),
-                      fit: BoxFit.cover,
+            RichText(
 
+                text: TextSpan(
+                  text: 'Welcome to ', style: TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+
+                  children: <TextSpan>[
+                TextSpan(
+                text: 'X Groceries', style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color:Colors.orange)
+                )
+                  ]
+                )
+            ),
+
+            SizedBox(height: 10.0),
+
+            Text('Fresh Groceries Delivered at your Doorstep',style: TextStyle(color:Colors.black),),
+
+            SizedBox(height: 30.0),
+
+            Row(mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+
+                RaisedButton(
+                    padding: EdgeInsets.only(left:30,right:30),
+                    onPressed: navigateToLogin,
+                    child: Text('LOGIN', style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    ),),
+                    shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                     ),
-                  ),
+                     color: Colors.orange
+                    ),
+                SizedBox(width:20.0),
+
+
+                RaisedButton(
+                    padding: EdgeInsets.only(left:30,right:30),
+                    onPressed: navigateToRegister,
+                    child: Text('REGISTER', style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    color: Colors.orange
                 ),
 
+                SizedBox(height : 20.0),
+
+
+
+              ],
+            ),
+
+            GestureDetector(
+              onTap: ()=> loginUser(),
+              child: Container(
+                width: 220.0,
+                height: 45.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/sign_in.png"),
+                    fit: BoxFit.cover,
+
+                  ),
+                ),
               ),
-            FutureBuilder<Object>(
-              future: auth.appleSignInAvailable,
-              builder: (context, snapshot) {
-                if (snapshot.data == true) {
-                  return AppleSignInButton(
-                    onPressed: () async {
-                      FirebaseUser user = await auth.appleSignIn();
-                      if (user != null) {
-                        Navigator.pushReplacementNamed(context, '/topics');
-                      }
-                    },
-                  );
-                } else {
-                  return Container();
-                }
-              },
             ),
 
           ],
         ),
       ),
+      
     );
   }
 

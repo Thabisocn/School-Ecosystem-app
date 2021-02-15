@@ -4,8 +4,10 @@
 
 ## To do's
 
--create where you insert schools
--display where a student schools in his/her profile
+-Create login page
+-find me a mentor
+-teacher create class
+-revision papers section
 -display if a user is a student or teacher on a post
 
 ## Try it

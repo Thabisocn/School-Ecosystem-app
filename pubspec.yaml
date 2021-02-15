@@ -41,6 +41,8 @@ dependencies:
   cached_network_image: ^2.0.0
   timeago: 2.0.17
 
+  file_picker: ^1.13.0+1
+
 
 
   path_provider: ^0.5.0+1
@@ -52,7 +54,7 @@ dependencies:
   random_string: ^2.0.1
   provider: ^3.2.0
 
-
+  flutter_svg: ^0.19.1
   apple_sign_in: 0.1.0
 
   rxdart: 0.23.1
@@ -84,12 +86,15 @@ flutter:
     - assets/covers/
     - assets/congrats.gif
     - assets/images/google_signin_button.png
-    - assets/yoga_1.jpg
-    - assets/yoga_2.jpg
-    - assets/yoga_3.jpg
     - assets/images/tamiat-logo-icon-color.png
     - assets/images/MokoweLogo_SplashScreen-01.png
     - assets/images/sign_in.png
+    - assets/images/distance.png
+    - assets/images/own_test.png
+    - assets/icons/
+    - assets/images/start.jpg
+    - assets/images/login.jpg
+
     
 
   # The following line ensures that the Material Icons font is

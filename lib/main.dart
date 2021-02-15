@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
 
+
       providers: [
         StreamProvider<Report>.value(value: Global.reportRef.documentStream),
         StreamProvider<FirebaseUser>.value(value: AuthService().user),
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
 
         // Theme
         theme: ThemeData(
+
           fontFamily: 'Nunito',
           bottomAppBarTheme: BottomAppBarTheme(
             color: Colors.black87,
